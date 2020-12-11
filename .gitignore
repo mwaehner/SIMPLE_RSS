@@ -1,0 +1,13 @@
+# created by virtualenv automatically
+# Default ignored files
+/shelf/
+/workspace.xml
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+*.pyc
+*.sqlite3
+.idea/
+rss-venv
