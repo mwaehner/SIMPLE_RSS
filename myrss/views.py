@@ -16,14 +16,7 @@ class Welcome(View):
             return render(request, 'myrss/welcome.html')
 
 
-class MyView(View):
-    def get(self, request):
-        # <view logic>
-        return HttpResponse('result')
-
-
 class Home(View):
-
     @method_decorator(login_required)
     def get(self, request):
         return render(request, 'appUser/home.html')
