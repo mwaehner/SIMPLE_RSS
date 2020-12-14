@@ -15,11 +15,20 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth.views import LoginView, LogoutView
 
+from .views import home, SignUpView
 from .views import welcome
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^appUser/', include('appUser.urls')),
-    url(r'^$', welcome, name="myrss_welcome")
+    url(r'^$', welcome, name="myrss_welcome"),
+    url(r'^home$', home, name="user_home"),
+    url(r'^login$',
+        LoginView.as_view(template_name="appUser/login_form.html"),
+        name="user_login"),
+    url(r'^logout$',
+        LogoutView.as_view(),
+        name="user_logout"),
+    url(r'^signup$', SignUpView.as_view(), name='user_signup'),
 ]
