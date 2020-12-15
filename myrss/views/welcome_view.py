@@ -16,14 +16,8 @@ class Welcome(View):
             return render(request, 'myrss/welcome.html')
 
 
-class Home(View):
-    @method_decorator(login_required)
-    def get(self, request):
-        return render(request, 'appUser/home.html')
 
 
 
-class SignUpView(CreateView):
-    form_class = UserCreationForm
-    template_name = "appUser/signup_form.html"
-    success_url = reverse_lazy('user_home')
+
+

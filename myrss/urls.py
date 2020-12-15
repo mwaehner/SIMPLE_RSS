@@ -17,7 +17,9 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 
-from myrss.views.views import Home, SignUpView, Welcome
+from myrss.views.welcome_view import Welcome
+from myrss.views.signup_view import SignUpView
+from myrss.views.home_view import Home
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
