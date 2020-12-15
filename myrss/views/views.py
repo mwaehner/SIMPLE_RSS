@@ -7,6 +7,20 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.utils.decorators import method_decorator
 
+from myrss.models.forms import SubscriptionForm
+from myrss.models.models import Subscription
+
+
+class NewSubscription(View):
+    @method_decorator(login_required)
+    def post(self, request):
+        subs = Subscription(from_user=self.request.user)
+        form = SubscriptionForm(instance=subs, data=self.request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('user_home')
+
+
 
 class Welcome(View):
     def get(self, request):
@@ -19,7 +33,9 @@ class Welcome(View):
 class Home(View):
     @method_decorator(login_required)
     def get(self, request):
-        return render(request, 'appUser/home.html')
+        my_subs = Subscription.objects.subs_for_user(request.user)
+        form = SubscriptionForm()
+        return render(request, 'appUser/home.html', {'form': form, 'subs': my_subs})
 
 
 

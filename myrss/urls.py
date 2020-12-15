@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 
-from myrss.views.views import Home, SignUpView, Welcome
+from myrss.views.views import Home, SignUpView, Welcome, NewSubscription
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -30,5 +30,6 @@ urlpatterns = [
         LogoutView.as_view(),
         name="user_logout"),
     url(r'^signup$', SignUpView.as_view(), name='user_signup'),
+    url(r'new_subscription$', NewSubscription.as_view(), name="new_subscription"),
 ]
 
