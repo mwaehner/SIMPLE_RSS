@@ -16,7 +16,6 @@ class SubscriptionForm(ModelForm):
             raise ValidationError("Not a valid rss feed")
         title = feedparser.parse(link)['feed']['title']
         self.cleaned_data['name'] = title
-        # update the instance value.
         self.instance.name = title
         return self.cleaned_data
 
