@@ -17,14 +17,14 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 
-from myrss.views.welcome_view import Welcome
+from myrss.views.welcome_view import WelcomeView
 from myrss.views.signup_view import SignUpView
-from myrss.views.home_view import Home
+from myrss.views.home_view import HomeView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', Welcome.as_view(), name="myrss_welcome"),
-    url(r'^home$', Home.as_view(), name="user_home"),
+    url(r'^$', WelcomeView.as_view(), name="myrss_welcome"),
+    url(r'^home$', HomeView.as_view(), name="user_home"),
     url(r'^login$',
         LoginView.as_view(template_name="appUser/login_form.html"),
         name="user_login"),
