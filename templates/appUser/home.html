@@ -9,23 +9,25 @@
     <h2 class="text-primary">Welcome, {{ user.username }}</h2>
 
     <h3>Active suscriptions</h3>
-    <div class="row">
+    <div>
+    <ul>
             {% if subs %}
                 <div class="list-group">
                     {% for s in subs %}
-                        <p>{{ s.link }}</p>
-                        <div class="btn-group pull-right" role="group" aria-label="Basic example">
-                          <button type="button" class="btn btn-secondary">View</button>
-                          <button type="button" class="btn btn-secondary">Update</button>
-                        </div>
+                        <li>
+                        <p>{{ s.name }}</p>
+                            <button type="button" class="btn btn-secondary">View</button>
+                            <button type="button" class="btn btn-secondary">Edit</button>
+                            <button type="button" class="btn btn-secondary">Delete</button>
+                        </li>
                         <br>
-
                     {% endfor %}
                 </div>
 
             {% else %}
                 <p>You have no subscriptions.</p>
             {% endif %}
+    </ul>
     </div>
 
 

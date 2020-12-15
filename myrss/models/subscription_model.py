@@ -13,4 +13,5 @@ class SubsQuerySet(models.QuerySet):
 class Subscription(models.Model):
     from_user = models.ForeignKey(User, related_name="subscriber", on_delete=models.CASCADE)
     link = models.CharField(max_length=300)
+    name = models.CharField(max_length=300)
     objects = SubsQuerySet.as_manager()

@@ -6,7 +6,7 @@ from django.views import View
 
 from myrss.models.subscription_form import SubscriptionForm
 from myrss.models.subscription_model import Subscription
-
+import feedparser
 
 class NewSubscriptionView(View):
     @method_decorator(login_required)
