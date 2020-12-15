@@ -8,7 +8,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 
 
-class Welcome(View):
+class WelcomeView(View):
     def get(self, request):
         if self.request.user.is_authenticated:
             return redirect('user_home')

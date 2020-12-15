@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 
 
 
-class Home(View):
+class HomeView(View):
     @method_decorator(login_required)
     def get(self, request):
         return render(request, 'appUser/home.html')
