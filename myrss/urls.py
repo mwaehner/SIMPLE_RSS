@@ -17,12 +17,16 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 
-from myrss.views.views import Home, SignUpView, Welcome, NewSubscription
+from myrss.views.home_view import HomeView
+from myrss.views.welcome_view import WelcomeView
+from myrss.views.signup_view import SignUpView
+from myrss.views.home_view import HomeView
+from myrss.views.newsubscription_view import NewSubscriptionView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', Welcome.as_view(), name="myrss_welcome"),
-    url(r'^home$', Home.as_view(), name="user_home"),
+    url(r'^$', WelcomeView.as_view(), name="myrss_welcome"),
+    url(r'^home$', HomeView.as_view(), name="user_home"),
     url(r'^login$',
         LoginView.as_view(template_name="appUser/login_form.html"),
         name="user_login"),
@@ -30,6 +34,6 @@ urlpatterns = [
         LogoutView.as_view(),
         name="user_logout"),
     url(r'^signup$', SignUpView.as_view(), name='user_signup'),
-    url(r'new_subscription$', NewSubscription.as_view(), name="new_subscription"),
+    url(r'new_subscription$', NewSubscriptionView.as_view(), name="new_subscription"),
 ]
 
