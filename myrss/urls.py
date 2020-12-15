@@ -33,4 +33,3 @@ urlpatterns = [
         name="user_logout"),
     url(r'^signup$', SignUpView.as_view(), name='user_signup'),
 ]
-
