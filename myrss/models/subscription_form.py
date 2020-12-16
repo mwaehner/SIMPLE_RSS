@@ -18,7 +18,10 @@ class SubscriptionForm(ModelForm):
         noWithThisLink = Subscription.objects.filter(from_user = self.instance.from_user, link = url).count()
         if noWithThisLink != 0:
             raise ValidationError("You are already subscribed to this feed")
-        title = feedparser.parse(url)['feed']['title']
-        self.cleaned_data['name'] = title
-        self.instance.name = title
+        try:
+            title = feedparser.parse(url)['feed']['title']
+            self.cleaned_data['name'] = title
+            self.instance.name = title
+        except Exception:
+            raise ValidationError("Not a valid rss feed")
         return self.cleaned_data
