@@ -12,7 +12,7 @@ class SubscriptionForm(ModelForm):
     def clean(self):
         link = self.cleaned_data.get("link")
         NewsFeed = feedparser.parse(link)
-        if NewsFeed.bozo: # este bit se setea cuando el parsing falla
+        if len(link) == 0 or NewsFeed.bozo: # NewsFeed.bozo se setea cuando el parsing falla
             raise ValidationError("Not a valid rss feed")
         title = feedparser.parse(link)['feed']['title']
         self.cleaned_data['name'] = title
