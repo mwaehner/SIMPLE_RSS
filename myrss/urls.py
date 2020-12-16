@@ -23,6 +23,7 @@ from myrss.views.signup_view import SignUpView
 from myrss.views.home_view import HomeView
 from myrss.views.newsubscription_view import NewSubscriptionView
 
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', WelcomeView.as_view(), name="myrss_welcome"),
@@ -36,4 +37,3 @@ urlpatterns = [
     url(r'^signup$', SignUpView.as_view(), name='user_signup'),
     url(r'new_subscription$', NewSubscriptionView.as_view(), name="new_subscription"),
 ]
-

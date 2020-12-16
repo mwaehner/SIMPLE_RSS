@@ -8,6 +8,7 @@ from myrss.models.subscription_form import SubscriptionForm
 from myrss.models.subscription_model import Subscription
 
 
+
 class HomeView(View):
     @method_decorator(login_required)
     def get(self, request):
