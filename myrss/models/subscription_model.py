@@ -15,3 +15,7 @@ class Subscription(models.Model):
     link = models.CharField(max_length=300)
     name = models.CharField(max_length=300)
     objects = SubsQuerySet.as_manager()
+
+    class Meta: #two instances with these fields equal cannot exist
+        unique_together = ('link', 'from_user',)
+

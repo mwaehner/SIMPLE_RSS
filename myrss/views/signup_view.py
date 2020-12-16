@@ -5,5 +5,5 @@ from django.views.generic import CreateView
 
 class SignUpView(CreateView):
     form_class = UserCreationForm
-    template_name = "appUser/signup_form.html"
+    template_name = "myrss/signup_form.html"
     success_url = reverse_lazy('user_home')

@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from .subscription_model import Subscription
+from django.contrib.auth.models import User
 import feedparser
 
 
@@ -10,12 +11,14 @@ class SubscriptionForm(ModelForm):
         exclude = ('from_user', 'name')
 
     def clean(self):
-        link = self.cleaned_data.get("link")
-        NewsFeed = feedparser.parse(link)
-        if len(link) == 0 or NewsFeed.bozo: # NewsFeed.bozo se setea cuando el parsing falla
+        url = self.cleaned_data.get("link")
+        NewsFeed = feedparser.parse(url)
+        if NewsFeed.bozo: # NewsFeed.bozo se setea cuando el parsing falla
             raise ValidationError("Not a valid rss feed")
-        title = feedparser.parse(link)['feed']['title']
+        noWithThisLink = Subscription.objects.filter(from_user = self.instance.from_user, link = url).count()
+        if noWithThisLink != 0:
+            raise ValidationError("You are already subscribed to this feed")
+        title = feedparser.parse(url)['feed']['title']
         self.cleaned_data['name'] = title
         self.instance.name = title
         return self.cleaned_data
-

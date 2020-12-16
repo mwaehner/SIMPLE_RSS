@@ -13,4 +13,4 @@ class HomeView(View):
     def get(self, request):
         my_subs = Subscription.objects.subs_for_user(request.user)
         form = SubscriptionForm()
-        return render(request, 'appUser/home.html', {'form': form, 'subs': my_subs})
+        return render(request, 'user/home.html', {'form': form, 'subs': my_subs})

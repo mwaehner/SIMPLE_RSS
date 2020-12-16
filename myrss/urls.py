@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^$', WelcomeView.as_view(), name="myrss_welcome"),
     url(r'^home$', HomeView.as_view(), name="user_home"),
     url(r'^login$',
-        LoginView.as_view(template_name="appUser/login_form.html"),
+        LoginView.as_view(template_name="myrss/login_form.html"),
         name="user_login"),
     url(r'^logout$',
         LogoutView.as_view(),

@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -16,9 +17,8 @@ class NewSubscriptionView(View):
         if form.is_valid():
             form.save()
         else:
-            #messages.error(request, "Error")
             my_subs = Subscription.objects.subs_for_user(request.user)
-            return render(request, 'appUser/home.html', {'form': form, 'subs': my_subs})
+            return render(request, 'user/home.html', {'form': form, 'subs': my_subs})
         return redirect('user_home')
 
 

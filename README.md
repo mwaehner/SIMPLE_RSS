@@ -13,7 +13,7 @@ Ejecutando el proyecto
 2- Para ejecutar finalmente, "python manage.py runserver"
 
 Corriendo los tests
-1- Todavía no hay
+1- "python manage.py test"
 
 
 
