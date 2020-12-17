@@ -4,6 +4,8 @@ from django.test import TestCase
 
 from myrss.models.subscription import Subscription
 
+def get_subscription_count_for(user):
+    return len(Subscription.objects.subscriptions_for_user(user))
 
 class AddSubscriptionViewTests(TestCase):
     def setUp(self):
@@ -11,33 +13,29 @@ class AddSubscriptionViewTests(TestCase):
         self.user = User.objects.get(username='testuser2')
 
     def test_invalid_link_does_not_add_feed(self):
-        my_subs = Subscription.objects.subscriptions_for_user(self.user)
-        subsno = len(my_subs)
+        subsno = get_subscription_count_for(self.user)
         response = self.client.post(
                 "/new_subscription", data={"link": "asdasd"}
         )
-        my_subs = Subscription.objects.subscriptions_for_user(self.user)
-        afteradding_subsno = len(my_subs)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
+        afteradding_subsno = get_subscription_count_for(self.user)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(subsno, afteradding_subsno)
 
     def test_valid_link_but_invalid_rss_feed_is_not_added(self):
-        my_subs = Subscription.objects.subscriptions_for_user(self.user)
-        subsno = len(my_subs)
+        subsno = get_subscription_count_for(self.user)
 
         response = self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/Google.html"}
         )
-        my_subs = Subscription.objects.subscriptions_for_user(self.user)
-        afteradding_subsno = len(my_subs)
+        afteradding_subsno = get_subscription_count_for(self.user)
 
-        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(subsno, afteradding_subsno)
 
 
     def test_valid_rss_feed_is_correctly_added(self):
         subs_before = Subscription.objects.subscriptions_for_user(self.user)
-        len_before = len(subs_before)
+        len_before = get_subscription_count_for(self.user)
 
         response = self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/clarinrss.xml"}
@@ -76,6 +74,6 @@ class AddSubscriptionViewTests(TestCase):
         subs_after = len(Subscription.objects.subscriptions_for_user(self.user))
 
         self.assertEqual("El país | Página12", my_subs[subs_init].name)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(subs_before, subs_after)
 
