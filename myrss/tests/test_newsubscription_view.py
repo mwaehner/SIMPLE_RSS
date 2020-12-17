@@ -9,71 +9,111 @@ def get_subscription_count_for(user):
 
 class AddSubscriptionViewTests(TestCase):
     def setUp(self):
-        self.client.force_login(User.objects.get_or_create(username='testuser2')[0])
-        self.user = User.objects.get(username='testuser2')
+        test_user = User.objects.get_or_create(username='testuser')
+        self.client.force_login(test_user[0])
+        self.user = User.objects.get(username='testuser')
 
     def test_invalid_link_does_not_add_feed(self):
-        subsno = get_subscription_count_for(self.user)
+        subscriptions_no_before = get_subscription_count_for(self.user)
         response = self.client.post(
                 "/new_subscription", data={"link": "asdasd"}
         )
-        afteradding_subsno = get_subscription_count_for(self.user)
+        subscriptions_no_after = get_subscription_count_for(self.user)
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
-        self.assertEqual(subsno, afteradding_subsno)
+        self.assertEqual(subscriptions_no_before, subscriptions_no_after)
 
     def test_valid_link_but_invalid_rss_feed_is_not_added(self):
-        subsno = get_subscription_count_for(self.user)
+        subscriptions_no_before = get_subscription_count_for(self.user)
 
         response = self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/Google.html"}
         )
-        afteradding_subsno = get_subscription_count_for(self.user)
+        subscriptions_no_after = get_subscription_count_for(self.user)
 
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
-        self.assertEqual(subsno, afteradding_subsno)
+        self.assertEqual(subscriptions_no_before, subscriptions_no_after)
 
 
     def test_valid_rss_feed_is_correctly_added(self):
-        subs_before = Subscription.objects.subscriptions_for_user(self.user)
-        len_before = get_subscription_count_for(self.user)
+        subscriptions_no_before = get_subscription_count_for(self.user)
 
         response = self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/clarinrss.xml"}
         )
         subs_after = Subscription.objects.subscriptions_for_user(self.user)
-        len_after = len(subs_after)
+        subscriptions_no_after = len(subs_after)
 
         self.assertEqual("Clarin.com - Home", subs_after[len(subs_after)-1].name)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(len_before+1, len_after)
+        self.assertEqual(subscriptions_no_before+1, subscriptions_no_after)
 
     def test_another_valid_rss_feed_is_correctly_added(self):
-        my_subs = Subscription.objects.subscriptions_for_user(self.user)
-        subsno = len(my_subs)
+        subscriptions_no_before = get_subscription_count_for(self.user)
 
         response = self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/pagina12rss.xml"}
         )
         my_subs = Subscription.objects.subscriptions_for_user(self.user)
-        afteradding_subsno = len(my_subs)
-        self.assertEqual("El país | Página12", my_subs[subsno].name)
+        subscriptions_no_after = len(my_subs)
+        self.assertEqual("El país | Página12", my_subs[subscriptions_no_before].name)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(subsno+1, afteradding_subsno)
+        self.assertEqual(subscriptions_no_before+1, subscriptions_no_after)
 
+    # an user cannot add a rss feed if already present in his feed
     def test_cannot_add_duplicate_feed(self):
-        subs_init = len(Subscription.objects.subscriptions_for_user(self.user))
+        subs_init = get_subscription_count_for(self.user)
         self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/pagina12rss.xml"}
         )
-        subs_before = len(Subscription.objects.subscriptions_for_user(self.user))
+        subscriptions_no_before = get_subscription_count_for(self.user)
 
         response = self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/pagina12rss.xml"}
         )
         my_subs = Subscription.objects.subscriptions_for_user(self.user)
-        subs_after = len(Subscription.objects.subscriptions_for_user(self.user))
+        subscriptions_no_after = get_subscription_count_for(self.user)
 
         self.assertEqual("El país | Página12", my_subs[subs_init].name)
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
-        self.assertEqual(subs_before, subs_after)
+        self.assertEqual(subscriptions_no_before, subscriptions_no_after)
+
+    def test_can_add_feed_even_if_present_in_another_users_feed(self):
+        response = self.client.post(
+            "/new_subscription", follow=True, data={"link": "test_utils/clarinrss.xml"}
+        )
+
+        another_test_user = User.objects.get_or_create(username='testuser2')
+        self.client.force_login(another_test_user[0])
+        self.user = User.objects.get(username='testuser2')
+        subscriptions_no_before = get_subscription_count_for(self.user)
+        another_user_subscriptions = Subscription.objects.subscriptions_for_user(self.user)
+        response = self.client.post(
+            "/new_subscription", follow=True, data={"link": "test_utils/clarinrss.xml"}
+        )
+        subscriptions_no_after = get_subscription_count_for(self.user)
+
+        self.assertEqual("Clarin.com - Home", another_user_subscriptions[subscriptions_no_after- 1].name)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertEqual(subscriptions_no_before + 1, subscriptions_no_after)
+
+    def test_adding_feed_does_not_modify_other_users_feed(self):
+        response = self.client.post(
+            "/new_subscription", follow=True, data={"link": "test_utils/pagina12rss.xml"}
+        )
+        subscriptions_no_before = get_subscription_count_for(self.user)
+        subscriptions_before = Subscription.objects.subscriptions_for_user(self.user)
+
+        another_test_user = User.objects.get_or_create(username='testuser2')
+        self.client.force_login(another_test_user[0])
+        self.user = User.objects.get(username='testuser2')
+
+        response = self.client.post(
+            "/new_subscription", follow=True, data={"link": "test_utils/clarinrss.xml"}
+        )
+
+        subscriptions_no_after = get_subscription_count_for(User.objects.get(username='testuser'))
+
+        self.assertEqual("El país | Página12", subscriptions_before[subscriptions_no_after- 1].name)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertEqual(subscriptions_no_before , subscriptions_no_after)
 

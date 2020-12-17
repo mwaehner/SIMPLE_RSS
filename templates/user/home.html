@@ -34,7 +34,7 @@
     <div class="row">
         <p>Add link to RSS below</p>
         <form method="post" action="{% url 'new_subscription' %}">
-            {{ form | crispy }}
+            {{ subscription_form | crispy }}
             {% csrf_token %}
             <button type="submit">Add</button>
         </form>
