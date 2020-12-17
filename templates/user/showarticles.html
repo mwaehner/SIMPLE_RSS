@@ -18,12 +18,16 @@
                         <li>
 
 
-                        <div style="clear: left;">
-                        {% if a.img_link %}
-                            <p style="float: left;"><img src={{ a.img_link }} height="150" width="200" border="5px"></p>
-                        {% else %}
-                            <p style="float: left;"><img src="{% static "images/default_new_image.jpeg" %}" height="150" width="200" border="5px"></p>
-                        {% endif %}
+                        <div class = "left-aligned-images">
+                            <div class = "custom-img-params">
+                                <p>
+                                {% if a.img_link %}
+                                    <img src={{ a.img_link }} height="150" width="200" border="5px">
+                                {% else %}
+                                    <img src="{% static "images/default_new_image.jpeg" %}" height="150" width="200" border="5px">
+                                {% endif %}
+                                </p>
+                            </div>
                         <a href={{a.link}}> <h3>{{ a.title }}</h3> </a>
                         {% if a.summary %}
                             <p>{{ a.summary }}</p>
