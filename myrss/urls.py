@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 
+from myrss import settings
 from myrss.views.home_view import HomeView
 from myrss.views.welcome_view import WelcomeView
 from myrss.views.signup_view import SignUpView
