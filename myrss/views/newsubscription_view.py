@@ -12,13 +12,14 @@ class NewSubscriptionView(View):
     @method_decorator(login_required)
     def post(self, request):
         subs = Subscription(owner=self.request.user)
-        form = SubscriptionForm(instance=subs, data=self.request.POST)
-        if form.is_valid():
-            form.save()
+        subscription_form = SubscriptionForm(instance=subs, data=self.request.POST)
+        if subscription_form.is_valid():
+            subscription_form.save()
+            return redirect('user_home')
         else:
             my_subs = Subscription.objects.subscriptions_for_user(request.user)
-            return render(request, 'user/home.html', {'form': form, 'subs': my_subs}, status=HTTPStatus.BAD_REQUEST)
-        return redirect('user_home')
+            return render(request, 'user/home.html', {'subscription_form': subscription_form, 'subs': my_subs}, status=HTTPStatus.BAD_REQUEST)
+
 
 
 
