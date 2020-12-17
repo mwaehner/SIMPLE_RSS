@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Last articles: {{ user.username }}
+{% endblock %}
+
+{% block content %}
+
+    <h2>Last articles</h2>
+    <div>
+    <ul style="list-style-type:none">
+            {% if articles %}
+                <div class="list-group">
+                    {% for a in articles %}
+                        <li>
+                            <a href={{a.link}}> <h3>{{ a.title }}</h3> </a>
+                        {% if a.summary %}
+                            <p>{{ a.summary }}</p>
+                        {% endif %}
+                        {% if a.img_link %}
+                            <img src={{ a.img_link }} alt="new image" style="width:500px;height:600px;">
+                        {% endif %}
+
+                        </li>
+                        <br>
+                    {% endfor %}
+                </div>
+
+            {% else %}
+                <p>There are no articles to see.</p>
+            {% endif %}
+
+    <div style="clear: left;">
+<p style="float: left;"><img src="http://placekitten.com/g/200/200" height="200" width="200" border="1px"></p>
+    <p>Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text</p></div>
+
+    </ul>
+    </div>
+
+
+
+{% endblock %}

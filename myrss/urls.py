@@ -17,19 +17,24 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 
+from myrss.views.home_view import HomeView
 from myrss.views.welcome_view import WelcomeView
 from myrss.views.signup_view import SignUpView
 from myrss.views.home_view import HomeView
+from myrss.views.newsubscription_view import NewSubscriptionView
+from myrss.views.showarticles_view import ShowArticlesView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', WelcomeView.as_view(), name="myrss_welcome"),
     url(r'^home$', HomeView.as_view(), name="user_home"),
     url(r'^login$',
-        LoginView.as_view(template_name="appUser/login_form.html"),
+        LoginView.as_view(template_name="myrss/login_form.html"),
         name="user_login"),
     url(r'^logout$',
         LogoutView.as_view(),
         name="user_logout"),
     url(r'^signup$', SignUpView.as_view(), name='user_signup'),
+    url(r'new_subscription$', NewSubscriptionView.as_view(), name="new_subscription"),
+    url(r'show_articles/(?P<subscription_id>\d+)/$', ShowArticlesView.as_view(), name="show_articles"),
 ]
