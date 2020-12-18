@@ -11,6 +11,6 @@ from myrss.models.subscription import Subscription
 class HomeView(View):
     @method_decorator(login_required)
     def get(self, request):
-        my_subs = Subscription.objects.subscriptions_for_user(request.user)
+        my_subscriptions = Subscription.objects.subscriptions_for_user(request.user)
         subscription_form = SubscriptionForm()
-        return render(request, 'user/home.html', {'subscription_form': subscription_form, 'subs': my_subs})
+        return render(request, 'user/home.html', {'subscription_form': subscription_form, 'subscriptions': my_subscriptions})

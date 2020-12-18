@@ -12,21 +12,21 @@ class AddSubscriptionFormTests(TestCase):
         self.user = User.objects.get(username='testuser')
 
     def test_form_from_valid_rss_feed_is_valid(self):
-        subs = Subscription(owner=self.user)
-        sf = SubscriptionForm(instance=subs, data={"link": "test_utils/clarinrss.xml"}) #https://www.clarin.com/rss/politica/
-        self.assertTrue(sf.is_valid())
+        subscription = Subscription(owner=self.user)
+        subscription_form = SubscriptionForm(instance=subscription, data={"link": "test_utils/clarinrss.xml"}) #https://www.clarin.com/rss/politica/
+        self.assertTrue(subscription_form.is_valid())
 
     def test_form_from_invalid_link_is_invalid(self):
-        subs = Subscription(owner=self.user)
-        sf = SubscriptionForm(instance=subs, data={"link": "asdas"})
-        self.assertFalse(sf.is_valid())
+        subscription = Subscription(owner=self.user)
+        subscription_form = SubscriptionForm(instance=subscription, data={"link": "asdas"})
+        self.assertFalse(subscription_form.is_valid())
 
     def test_form_from_invalid_rss_feed_is_invalid(self):
-        subs = Subscription(owner=self.user)
-        sf = SubscriptionForm(instance=subs, data={"link": "test_utils/Google.html"})  #https://www.google.com
-        self.assertFalse(sf.is_valid())
+        subscription = Subscription(owner=self.user)
+        subscription_form = SubscriptionForm(instance=subscription, data={"link": "test_utils/Google.html"})  #https://www.google.com
+        self.assertFalse(subscription_form.is_valid())
 
     def test_form_from_other_valid_rss_feed_is_valid(self):
-        subs = Subscription(owner=self.user)
-        sf = SubscriptionForm(instance=subs, data={"link": "test_utils/pagina12rss.xml"}) #https://www.pagina12.com.ar/rss/secciones/el-pais/notas
-        self.assertTrue(sf.is_valid())
+        subscription = Subscription(owner=self.user)
+        subscription_form = SubscriptionForm(instance=subscription, data={"link": "test_utils/pagina12rss.xml"}) #https://www.pagina12.com.ar/rss/secciones/el-pais/notas
+        self.assertTrue(subscription_form.is_valid())

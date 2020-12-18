@@ -11,14 +11,14 @@ from myrss.models.subscription import Subscription
 class NewSubscriptionView(View):
     @method_decorator(login_required)
     def post(self, request):
-        subs = Subscription(owner=self.request.user)
-        subscription_form = SubscriptionForm(instance=subs, data=self.request.POST)
+        subscription = Subscription(owner=self.request.user)
+        subscription_form = SubscriptionForm(instance=subscription, data=self.request.POST)
         if subscription_form.is_valid():
             subscription_form.save()
             return redirect('user_home')
         else:
-            my_subs = Subscription.objects.subscriptions_for_user(request.user)
-            return render(request, 'user/home.html', {'subscription_form': subscription_form, 'subs': my_subs}, status=HTTPStatus.BAD_REQUEST)
+            subscriptions = Subscription.objects.subscriptions_for_user(request.user)
+            return render(request, 'user/home.html', {'subscription_form': subscription_form, 'subscriptions': subscriptions}, status=HTTPStatus.BAD_REQUEST)
 
 
 

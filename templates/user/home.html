@@ -11,9 +11,9 @@
     <h3>Active suscriptions</h3>
     <div>
     <ul>
-            {% if subs %}
+            {% if subscriptions %}
                 <div class="list-group">
-                    {% for s in subs %}
+                    {% for s in subscriptions %}
                         <li>
                         <p>{{ s.name }}</p>
                             <button type="button" class="btn btn-secondary">View</button>
