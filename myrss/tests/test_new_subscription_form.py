@@ -5,7 +5,7 @@ from myrss.forms.subscription_form import SubscriptionForm
 from myrss.models.subscription import Subscription
 
 
-class AddSubscriptionFormTests(TestCase):
+class NewSubscriptionFormTests(TestCase):
     def setUp(self):
         testUser = User.objects.get_or_create(username='testuser')
         self.client.force_login(testUser[0])

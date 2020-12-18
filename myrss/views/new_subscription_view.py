@@ -16,9 +16,8 @@ class NewSubscriptionView(View):
         if subscription_form.is_valid():
             subscription_form.save()
             return redirect('user_home')
-        else:
-            subscriptions = Subscription.objects.subscriptions_for_user(request.user)
-            return render(request, 'user/home.html', {'subscription_form': subscription_form, 'subscriptions': subscriptions}, status=HTTPStatus.BAD_REQUEST)
+        subscriptions = Subscription.objects.subscriptions_for_user(request.user)
+        return render(request, 'user/home.html', {'subscription_form': subscription_form, 'subscriptions': subscriptions}, status=HTTPStatus.BAD_REQUEST)
 
 
 

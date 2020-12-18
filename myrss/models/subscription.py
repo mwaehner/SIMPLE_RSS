@@ -11,7 +11,7 @@ class SubscriptionQuerySet(models.QuerySet):
 
 
 class Subscription(models.Model):
-    owner = models.ForeignKey(User, related_name="subscriber", on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, related_name="owner", on_delete=models.CASCADE)
     link = models.CharField(max_length=300)
     name = models.CharField(max_length=350)
     objects = SubscriptionQuerySet.as_manager()

@@ -21,7 +21,7 @@ from myrss.views.home_view import HomeView
 from myrss.views.welcome_view import WelcomeView
 from myrss.views.signup_view import SignUpView
 from myrss.views.home_view import HomeView
-from myrss.views.newsubscription_view import NewSubscriptionView
+from myrss.views.new_subscription_view import NewSubscriptionView
 
 
 urlpatterns = [
