@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Home: {{ user.username }}
+{% endblock %}
+
+{% block content %}
+    <h2 class="text-primary">Welcome, {{ user.username }}</h2>
+
+    <h3>Active suscriptions</h3>
+    <div>
+    <ul>
+            {% if subscriptions %}
+                <div class="list-group">
+                    {% for s in subscriptions %}
+                        <li>
+                        <p>{{ s.name }}</p>
+                            <button type="button" class="btn btn-secondary">View</button>
+                            <button type="button" class="btn btn-secondary">Edit</button>
+                            <button type="button" class="btn btn-secondary">Delete</button>
+                        </li>
+                        <br>
+                    {% endfor %}
+                </div>
+
+            {% else %}
+                <p>You have no subscriptions.</p>
+            {% endif %}
+    </ul>
+    </div>
+
+
+    <div class="row">
+        <p>Add link to RSS below</p>
+        <form method="post" action="{% url 'new_subscription' %}">
+            {{ subscription_form | crispy }}
+            {% csrf_token %}
+            <button type="submit">Add</button>
+        </form>
+    </div>
+
+
+
+{% endblock %}

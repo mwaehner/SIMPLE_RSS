@@ -13,13 +13,27 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
+from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.auth.views import LoginView, LogoutView
 
-from .views import welcome
+from myrss.views.home_view import HomeView
+from myrss.views.welcome_view import WelcomeView
+from myrss.views.signup_view import SignUpView
+from myrss.views.home_view import HomeView
+from myrss.views.new_subscription_view import NewSubscriptionView
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^appUser/', include('appUser.urls')),
-    url(r'^$', welcome, name="myrss_welcome")
+    url(r'^$', WelcomeView.as_view(), name="myrss_welcome"),
+    url(r'^home$', HomeView.as_view(), name="user_home"),
+    url(r'^login$',
+        LoginView.as_view(template_name="myrss/login_form.html"),
+        name="user_login"),
+    url(r'^logout$',
+        LogoutView.as_view(),
+        name="user_logout"),
+    url(r'^signup$', SignUpView.as_view(), name='user_signup'),
+    url(r'new_subscription$', NewSubscriptionView.as_view(), name="new_subscription"),
 ]
