@@ -20,7 +20,7 @@ Dependencias del proyecto
 
 2- Luego correr 
 
-```. myenv/bin/activate"```
+```. myenv/bin/activate```
 
 3- Una vez dentro del virtual env, correr:
 
@@ -45,6 +45,8 @@ y luego
 Corriendo los tests
 
 1- ```python manage.py test```
+
+(aún no hay)
 
 
 
