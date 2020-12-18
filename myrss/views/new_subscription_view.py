@@ -21,8 +21,8 @@ class NewSubscriptionView(View):
             self.__add_articles_of_subscription(new_subscription)
             return redirect('user_home')
 
-        my_subs = Subscription.objects.subscriptions_for_user(request.user)
-        return render(request, 'user/home.html', {'subscription_form': form, 'subscriptions': my_subs}, status=HTTPStatus.BAD_REQUEST)
+        user_subscriptions = Subscription.objects.subscriptions_for_user(request.user)
+        return render(request, 'user/home.html', {'subscription_form': form, 'subscriptions': user_subscriptions}, status=HTTPStatus.BAD_REQUEST)
 
     def __add_articles_of_subscription(self, new_subscription):
         url = new_subscription.link
