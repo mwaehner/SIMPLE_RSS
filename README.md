@@ -1,5 +1,7 @@
 Prerequisitos necesarios y forma de instalación en Ubuntu:
-1- Python3 (sudo apt-get install python3.6)
+1- Python3 
+```sudo apt-get install python3.6
+```
 2- Pip (sudo apt install python-pip) (debería venir con python3)
 3- Virtualenv (pip install virtualenv). Recomendable trabajar sobre un virtual env para tener aisladas las dependencias del proyecto.
 
@@ -13,7 +15,7 @@ Ejecutando el proyecto
 2- Para ejecutar finalmente, "python manage.py runserver"
 
 Corriendo los tests
-1- Todavía no hay
+1- "python manage.py test"
 
 
 
