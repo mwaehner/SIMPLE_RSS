@@ -1,15 +1,16 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.views.generic import CreateView
-from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse_lazy
-from django.views import View
+from django.shortcuts import render
 from django.utils.decorators import method_decorator
+from django.views import View
+
+from myrss.forms.subscription_form import SubscriptionForm
+from myrss.models.subscription import Subscription
 
 
 
 class HomeView(View):
     @method_decorator(login_required)
     def get(self, request):
-        return render(request, 'appUser/home.html')
+        my_subscriptions = Subscription.objects.subscriptions_for_user(request.user)
+        subscription_form = SubscriptionForm()
+        return render(request, 'user/home.html', {'subscription_form': subscription_form, 'subscriptions': my_subscriptions})
