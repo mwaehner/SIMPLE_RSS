@@ -11,6 +11,7 @@
     <h3>Active suscriptions</h3>
     <div>
     <ul>
+<<<<<<< HEAD
             {% if subs %}
                 <div class="list-group">
                     {% for s in subs %}
@@ -19,6 +20,16 @@
                             <a href="{% url 'show_articles' subscription_id=s.id %}" class="btn btn-primary">View</a>
                             <button type="button" class="btn btn-primary">Edit</button>
                             <button type="button" class="btn btn-primary">Delete</button>
+=======
+            {% if subscriptions %}
+                <div class="list-group">
+                    {% for s in subscriptions %}
+                        <li>
+                        <p>{{ s.name }}</p>
+                            <button type="button" class="btn btn-secondary">View</button>
+                            <button type="button" class="btn btn-secondary">Edit</button>
+                            <button type="button" class="btn btn-secondary">Delete</button>
+>>>>>>> 1-como-un-usuario-quiero-agregar-una-nueva-subscripcion-a-un-feed
                         </li>
                         <br>
                     {% endfor %}
@@ -34,7 +45,11 @@
     <div class="row">
         <p>Add link to RSS below</p>
         <form method="post" action="{% url 'new_subscription' %}">
+<<<<<<< HEAD
             {{ form | crispy }}
+=======
+            {{ subscription_form | crispy }}
+>>>>>>> 1-como-un-usuario-quiero-agregar-una-nueva-subscripcion-a-un-feed
             {% csrf_token %}
             <button type="submit">Add</button>
         </form>

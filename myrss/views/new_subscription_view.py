@@ -37,12 +37,10 @@ class NewSubscriptionView(View):
                 )
                 article.subscriptions.add(new_subscription)
 
-
         else:
             my_subs = Subscription.objects.subscriptions_for_user(request.user)
             return render(request, 'user/home.html', {'form': form, 'subs': my_subs}, status=HTTPStatus.BAD_REQUEST)
         return redirect('user_home')
-
 
 
 

@@ -18,12 +18,15 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 
 from myrss import settings
+
 from myrss.views.home_view import HomeView
 from myrss.views.welcome_view import WelcomeView
 from myrss.views.signup_view import SignUpView
 from myrss.views.home_view import HomeView
 from myrss.views.new_subscription_view import NewSubscriptionView
 from myrss.views.show_articles_view import ShowArticlesView
+
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
