@@ -15,16 +15,16 @@ class NewSubscriptionView(View):
     @method_decorator(login_required)
     def post(self, request):
         new_subscription = Subscription(owner=self.request.user)
-        form = SubscriptionForm(instance=new_subscription, data=self.request.POST)
-        if form.is_valid():
-            new_subscription = form.save()
-            self.__add_articles_of_subscription(new_subscription)
+        new_subscription_form = SubscriptionForm(instance=new_subscription, data=self.request.POST)
+        if new_subscription_form.is_valid():
+            new_subscription = new_subscription_form.save()
+            self._add_articles_of_subscription(new_subscription)
             return redirect('user_home')
 
         user_subscriptions = Subscription.objects.subscriptions_for_user(request.user)
-        return render(request, 'user/home.html', {'subscription_form': form, 'subscriptions': user_subscriptions}, status=HTTPStatus.BAD_REQUEST)
+        return render(request, 'user/home.html', {'subscription_form': new_subscription_form, 'subscriptions': user_subscriptions}, status=HTTPStatus.BAD_REQUEST)
 
-    def __add_articles_of_subscription(self, new_subscription):
+    def _add_articles_of_subscription(self, new_subscription):
         url = new_subscription.link
         news_feed = feedparser.parse(url)
         for i in range(len(news_feed.entries)):
