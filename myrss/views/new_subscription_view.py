@@ -4,6 +4,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from http import HTTPStatus
 import feedparser
+import re
 
 from myrss.forms.subscription_form import SubscriptionForm
 from myrss.models.article import Article
@@ -25,8 +26,9 @@ class NewSubscriptionView(View):
                 newsummary = news_feed.entries[i].get('summary')
                 newlinks = news_feed.entries[i].get('links')
                 imglink = ""
-                if newlinks!= None and len(newlinks)>0: #image commonly comes as last item of attribute 'links'
-                    imglink = newlinks[-1].get('href')
+                for j in range(len(newlinks)):
+                    if newlinks!= None and len(newlinks)>0 and re.match('image', newlinks[j].get('type')):
+                        imglink = newlinks[j].get('href')
                 (article, was_created) = Article.objects.get_or_create(
                     link = news_feed.entries[i].get('link'),
                     title = news_feed.entries[i].get('title'),

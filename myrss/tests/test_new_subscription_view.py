@@ -7,7 +7,7 @@ from myrss.models.subscription import Subscription
 def get_subscription_count_for(user):
     return len(Subscription.objects.subscriptions_for_user(user))
 
-class AddSubscriptionViewTests(TestCase):
+class NewSubscriptionViewTests(TestCase):
     def setUp(self):
         self.client.force_login(User.objects.get_or_create(username='testuser2')[0])
         self.user = User.objects.get(username='testuser2')
