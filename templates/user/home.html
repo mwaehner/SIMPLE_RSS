@@ -16,9 +16,9 @@
                     {% for s in subscriptions %}
                         <li>
                         <p>{{ s.name }}</p>
-                            <button type="button" class="btn btn-secondary">View</button>
-                            <button type="button" class="btn btn-secondary">Edit</button>
-                            <button type="button" class="btn btn-secondary">Delete</button>
+                            <a href="{% url 'show_articles' subscription_id=s.id %}" class="btn btn-primary">View</a>
+                            <button type="button" class="btn btn-primary">Edit</button>
+                            <button type="button" class="btn btn-primary">Delete</button>
                         </li>
                         <br>
                     {% endfor %}
