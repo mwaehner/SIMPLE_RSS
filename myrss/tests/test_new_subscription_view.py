@@ -53,15 +53,15 @@ class NewSubscriptionViewTests(TestCase):
         response = self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/pagina12rss.xml"}
         )
-        my_subscriptions = Subscription.objects.subscriptions_for_user(self.user)
-        subscriptions_no_after = len(my_subscriptions)
-        self.assertEqual("El país | Página12", my_subscriptions[subscriptions_no_before].name)
+        user_subscriptions = Subscription.objects.subscriptions_for_user(self.user)
+        subscriptions_no_after = len(user_subscriptions)
+        self.assertEqual("El país | Página12", user_subscriptions[subscriptions_no_before].name)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(subscriptions_no_before+1, subscriptions_no_after)
 
     # an user cannot add a rss feed if already present in his feed
     def test_cannot_add_duplicate_feed(self):
-        subscription_init = get_subscription_count_for(self.user)
+        subscriptions_init = get_subscription_count_for(self.user)
         self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/pagina12rss.xml"}
         )
@@ -70,10 +70,10 @@ class NewSubscriptionViewTests(TestCase):
         response = self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/pagina12rss.xml"}
         )
-        my_subscriptions = Subscription.objects.subscriptions_for_user(self.user)
+        user_subscriptions = Subscription.objects.subscriptions_for_user(self.user)
         subscriptions_no_after = get_subscription_count_for(self.user)
 
-        self.assertEqual("El país | Página12", my_subscriptions[subscription_init].name)
+        self.assertEqual("El país | Página12", user_subscriptions[subscriptions_init].name)
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(subscriptions_no_before, subscriptions_no_after)
 
@@ -116,4 +116,5 @@ class NewSubscriptionViewTests(TestCase):
         self.assertEqual("El país | Página12", subscriptions_before[subscriptions_no_after- 1].name)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(subscriptions_no_before , subscriptions_no_after)
+
 

@@ -120,6 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
@@ -130,3 +131,4 @@ LOGOUT_REDIRECT_URL="myrss_welcome"
 LOGIN_URL="user_login"
 
 CRISPY_TEMPLATE_PACK='bootstrap3'
+
