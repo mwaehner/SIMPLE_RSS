@@ -16,7 +16,7 @@
 
         {{ form|crispy }}
 
-        <button type="submit" class="btn btn-success">Sign in</button>
+        <button type="submit" class="btn btn-success" onclick="this.disabled=true,this.form.submit();">Sign in</button>
     </form>
 
 {% endblock %}
