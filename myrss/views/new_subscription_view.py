@@ -35,10 +35,11 @@ class NewSubscriptionView(View):
                     imglink = newlinks[j].get('href')
             (article, was_created) = Article.objects.get_or_create(
                 link=news_feed.entries[i].get('link'),
-                title=news_feed.entries[i].get('title'),
-                summary=news_feed.entries[i].get('summary'),
-                img_link=imglink
             )
+            article.title = news_feed.entries[i].get('title')
+            article.summary = news_feed.entries[i].get('summary')
+            article.img_link = imglink
+            article.save()
             article.subscriptions.add(new_subscription)
 
 
