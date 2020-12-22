@@ -12,7 +12,7 @@ class SubscriptionForm(ModelForm):
 
     def clean(self):
         url = self.cleaned_data.get("link")
-        if type(url)!=str or url == "":
+        if not url:
             raise ValidationError("Please submit a nonempty link")
         news_feed = feedparser.parse(url)
         if news_feed.bozo: # news_feed.bozo se setea cuando el parsing falla
