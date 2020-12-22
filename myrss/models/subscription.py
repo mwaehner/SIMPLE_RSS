@@ -14,6 +14,9 @@ class Subscription(models.Model):
     name = models.CharField(max_length=350)
     objects = SubscriptionQuerySet.as_manager()
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         unique_together = ('link', 'owner',)
 

@@ -9,3 +9,6 @@ class Article(models.Model):
     img_link = models.URLField(blank=True, null=True)
     title = models.CharField(max_length=500)
     summary = models.CharField(max_length=1000, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
