@@ -13,10 +13,9 @@ class SignUpView(CreateView):
     success_url = reverse_lazy('user_home')
 
     def form_valid(self, form):
-        form.save()
+        response = super().form_valid(form)
         username = self.request.POST['username']
         password = self.request.POST['password1']
         user = authenticate(username=username, password=password)
         login(self.request, user)
-        #return HttpResponseRedirect(self.get_success_url())
-        return HttpResponseRedirect(reverse_lazy('user_home'))
+        return response
