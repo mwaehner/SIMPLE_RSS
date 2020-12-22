@@ -2,6 +2,7 @@ from http import HTTPStatus
 from django.contrib.auth.models import User
 from django.test import TestCase
 
+from myrss.models.article import Article
 from myrss.models.subscription import Subscription
 
 def get_subscription_count_for(user):
@@ -116,5 +117,24 @@ class NewSubscriptionViewTests(TestCase):
         self.assertEqual("El país | Página12", subscriptions_before[subscriptions_no_after- 1].name)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(subscriptions_no_before , subscriptions_no_after)
+
+
+    def test_adding_already_existent_articles_does_not_duplicate_them(self):
+        response = self.client.post(
+            "/new_subscription", follow=True, data={"link": "test_utils/pagina12rss.xml"}
+        )
+        articles_no_before = len(Article.objects.all())
+
+        another_test_user = User.objects.get_or_create(username='testuser2')
+        self.client.force_login(another_test_user[0])
+        self.user = User.objects.get(username='testuser2')
+
+        response = self.client.post(
+            "/new_subscription", follow=True, data={"link": "test_utils/pagina12rss.xml"}
+        )
+
+        articles_no_after = len(Article.objects.all())
+
+        self.assertEqual(articles_no_before, articles_no_after)
 
 
