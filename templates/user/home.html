@@ -12,17 +12,22 @@
     <div>
     <ul>
             {% if subscriptions %}
-                <div class="list-group">
+
                     {% for s in subscriptions %}
                         <li>
                         <p>{{ s.name }}</p>
-                            <a href="{% url 'show_articles' subscription_id=s.id %}" class="btn btn-primary" >View</a>
-                            <button type="button" class="btn btn-primary">Update</button>
-                            <button type="button" class="btn btn-primary">Delete</button>
+                            <form method="get"  style="display:inline;" action="{% url 'show_articles' subscription_id=s.id %}">
+                                <button type="submit" class="btn btn-primary" >View</button>
+                            </form>
+                            <form method="get" style="display:inline;"  action="{% url 'update_subscription' subscription_id=s.id %}">
+                                <button type="submit" class="btn btn-primary" >Update</button>
+                            </form>
+                            <button type="submit" class="btn btn-primary" >Delete</button>
                         </li>
+
                         <br>
                     {% endfor %}
-                </div>
+
 
             {% else %}
                 <p>You have no subscriptions.</p>
@@ -39,6 +44,12 @@
             <button type="submit" class="btn btn-success">Add</button>
         </form>
     </div>
+
+    {% if show_updated %}
+        {% include "modals/show_updated_no.html" with new_articles_no=updated_no %}
+    {% endif %}
+
+
 
 
 

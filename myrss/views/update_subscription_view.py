@@ -1,24 +1,22 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.core.exceptions import PermissionDenied
 from http import HTTPStatus
-import feedparser
-
 from myrss.forms.subscription_form import SubscriptionForm
 from myrss.models.article import Article
 from myrss.models.subscription import Subscription
 
 
-
-class ShowArticlesView(View):
+class UpdateSubscriptionView(View):
     @method_decorator(login_required)
     def get(self, request, subscription_id):
-        subscription = Subscription.objects.get(id=subscription_id)
+        subscription = Subscription.objects.get(pk=subscription_id)
         if not request.user == subscription.owner:
             raise PermissionDenied
-        articles = subscription.article_set.all()
-        last_articles = [articles[len(articles)-i-1] for i in range(min(10, len(articles)))]
-        return render(request, 'user/show_articles.html', {'articles': last_articles})
+        new_articles_added = subscription.get_last_articles()
+        user_subscriptions = Subscription.objects.subscriptions_for_user(request.user)
+        return render(request, 'user/home.html',
+                      {'subscription_form': SubscriptionForm(), 'subscriptions': user_subscriptions, 'show_updated': True, 'updated_no': new_articles_added})
 

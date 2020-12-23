@@ -21,10 +21,12 @@ class Subscription(models.Model):
     def __str__(self):
         return self.name
 
-    def _add_articles_of_subscription(self):
+    def get_last_articles(self):
         url = self.link
         news_feed = feedparser.parse(url)
-        for i in range(len(news_feed.entries)):
+        added_no = 0
+        #we traverse the news in reversed order add the most recent news at the last rows
+        for i in range(len(news_feed.entries)-1,-1,-1):
             newlinks = news_feed.entries[i].get('links')
             imglink = ""
             for j in range(len(newlinks)):
@@ -33,11 +35,14 @@ class Subscription(models.Model):
             (article, was_created) = Article.objects.get_or_create(
                 link=news_feed.entries[i].get('link'),
             )
+            if not self.article_set.filter(link=article.link).exists():
+                added_no+=1
             article.title = news_feed.entries[i].get('title')
             article.summary = news_feed.entries[i].get('summary')
             article.img_link = imglink
             article.save()
             article.subscriptions.add(self)
+        return added_no
 
     class Meta:
         unique_together = ('link', 'owner',)
