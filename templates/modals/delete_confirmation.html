@@ -1,0 +1,18 @@
+<!–Delete button will redirect to the href of the element with 'id = caller-id' property in this modal–>
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" caller-id="" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body confirm-delete">
+        This action is permanent!
+      </div>
+      <div class="modal-footer">
+        <button type="button" style="display:inline;" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <form method="post" style="display:inline;" action="{% url 'delete_subscription' subscription_id=subs_id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -11,7 +11,7 @@ from myrss.models.subscription import Subscription
 
 class UpdateSubscriptionView(View):
     @method_decorator(login_required)
-    def get(self, request, subscription_id):
+    def post(self, request, subscription_id):
         subscription = Subscription.objects.get(pk=subscription_id)
         if not request.user == subscription.owner:
             raise PermissionDenied

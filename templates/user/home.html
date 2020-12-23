@@ -19,10 +19,12 @@
                             <form method="get"  style="display:inline;" action="{% url 'show_articles' subscription_id=s.id %}">
                                 <button type="submit" class="btn btn-primary" >View</button>
                             </form>
-                            <form method="get" style="display:inline;"  action="{% url 'update_subscription' subscription_id=s.id %}">
+                            <form method="post" style="display:inline;"  action="{% url 'update_subscription' subscription_id=s.id %}">
+                                {% csrf_token %}
                                 <button type="submit" class="btn btn-primary" >Update</button>
                             </form>
-                            <button type="submit" class="btn btn-primary" >Delete</button>
+                            {% include "modals/delete_confirmation.html" with subs_id=s.id%}
+                            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#confirmDeleteModal">Delete</button>
                         </li>
 
                         <br>
@@ -48,6 +50,7 @@
     {% if show_updated %}
         {% include "modals/show_updated_no.html" with new_articles_no=updated_no %}
     {% endif %}
+
 
 
 
