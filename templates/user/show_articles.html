@@ -12,8 +12,11 @@
     <h2>Last articles</h2>
 
             {% if articles %}
-                    {% for a in articles %}
-                        <div class = "article">
+                <ul id="articlesList">
+                    {% for a, a_read, buttonid in articles %}
+
+
+                        <li class = "article">
 
                         <div class = "article-image">
                             {% if a.img_link %}
@@ -27,10 +30,18 @@
                             {% if a.summary %}
                                 <p>{{ a.summary }}</p>
                             {% endif %}
+                            <div id=readstatus">
+                            {% if a_read %}
+                                <input onclick="change(this.id)" type="button" value="Marcar como no leido"  class="btn btn-primary" id={{ buttonid }}></input>
+                                {% else %}
+                                <input onclick="change(this.id)" type="button" value="Marcar como leido"  class="btn btn-primary" id={{ buttonid }}></input>
+                            {% endif %}
+                            </div>
                         </div>
-                        </div>
+                        </li>
                         <br>
                     {% endfor %}
+                </ul>
 
 
             {% else %}
