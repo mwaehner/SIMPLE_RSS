@@ -30,12 +30,8 @@
                             {% if a.summary %}
                                 <p>{{ a.summary }}</p>
                             {% endif %}
-                            <div id=readstatus">
-                            {% if a_read %}
-                                <input onclick="change(this.id)" type="button" value="Marcar como no leido"  class="btn btn-primary" id={{ buttonid }}></input>
-                                {% else %}
-                                <input onclick="change(this.id)" type="button" value="Marcar como leido"  class="btn btn-primary" id={{ buttonid }}></input>
-                            {% endif %}
+                            <div class="readstatus">
+                            <button class="toggle-unread" data-article-id={{ a.id }} data-read={{ a_read }}>{% if a_read %}marcar como no leido{% else %}marcar como leido{% endif %}</button>
                             </div>
                         </div>
                         </li>
