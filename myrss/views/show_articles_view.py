@@ -15,10 +15,8 @@ from myrss.models.subscription import Subscription
 class ShowArticlesView(View):
     @method_decorator(login_required)
     def get(self, request, subscription_id):
-        subscription = Subscription.objects.get(id=subscription_id)
-        if not request.user == subscription.owner:
-            raise PermissionDenied
-        articles = subscription.article_set.all()
-        last_articles = [articles[len(articles)-i-1] for i in range(min(10, len(articles)))]
+        subscription = Subscription.objects.get(id=subscription_id, owner=request.user)
+        articles_number_to_show = min(len(subscription.article_set.all()), 10)
+        last_articles = subscription.article_set.order_by('-created_at').all()[:articles_number_to_show]
         return render(request, 'user/show_articles.html', {'articles': last_articles})
 
