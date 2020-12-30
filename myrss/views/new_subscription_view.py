@@ -18,7 +18,7 @@ class NewSubscriptionView(View):
         new_subscription_form = SubscriptionForm(instance=new_subscription, data=self.request.POST)
         if new_subscription_form.is_valid():
             new_subscription = new_subscription_form.save()
-            new_subscription._add_articles_of_subscription()
+            new_subscription.get_last_articles()
             return redirect('user_home')
 
         user_subscriptions = Subscription.objects.subscriptions_for_user(request.user)

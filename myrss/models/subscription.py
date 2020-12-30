@@ -21,7 +21,7 @@ class Subscription(models.Model):
     def __str__(self):
         return self.name
 
-    def _add_articles_of_subscription(self):
+    def get_last_articles(self):
         url = self.link
         news_feed = feedparser.parse(url)
         for i in range(len(news_feed.entries)):
