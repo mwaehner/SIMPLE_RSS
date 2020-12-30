@@ -30,11 +30,7 @@ Esto instalará automáticamente todas las dependencias del proyecto.
 
 Ejecutando el proyecto
 
-1- Antes de ejecutar el proyecto es necesario hacer y correr las migraciones. Primero hacemos:
-
-```python manage.py makemigrations```
-
-y luego
+1- Antes de ejecutar el proyecto es necesario correr las migraciones.
 
 ```python manage.py migrate```
 
