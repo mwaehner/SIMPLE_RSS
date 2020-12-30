@@ -4,25 +4,6 @@ $('form').submit(function() {
 
 $('#showUpdatedNoModal').modal('show');
 
-/*
-$(document).ready(function () {
-    $("#set_read").click(function () {
-        $("#readstatus").fadeOut(function () {
-            $("#readstatus").text(($("#readstatus").text() == 'Leido') ? 'No Leido' : 'Leido').fadeIn();
-        })
-    })
-});
-
-
-function change(button_id, a_id)
-{
-    //var xhr = new XMLHttpRequest();
-    var elem = document.getElementById(button_id);
-    if (elem.value=="Marcar como leido") {
-        elem.value = "Marcar como no leido";
-    }
-    else elem.value = "Marcar como leido";
-}*/
 
 
 function getCookie(name) {
@@ -44,17 +25,37 @@ const csrftoken = getCookie('csrftoken');
 
 
 $(document).ready(function() {
+    // toggling read status of article when clicking button
     $('.readstatus').on('click', 'button', function () {
 
         if($(this).attr('data-read')=="True"){
             $(this).text("marcar como leido")
             $(this).attr('data-read', "False")
+            $(this).closest(".article").removeClass('read-article')
         }
         else {
             $(this).text("marcar como no leido")
             $(this).attr('data-read', "True")
+            $(this).closest(".article").addClass('read-article')
         }
+
         $.ajax('/toggle_read/' + $(this).data('article-id') + '/', {
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: csrftoken
+            }
+        })
+
+    })
+
+    //setting article as read when clicking on link
+    $('.article-text').on('click', 'a', function () {
+
+        var button = $(this).closest('.article-text').find('.toggle-unread')
+        button.text("marcar como no leido")
+        button.attr('data-read', "True")
+        $(this).closest(".article").addClass('read-article')
+        $.ajax('/set_read/' + button.data('article-id') + '/', {
             type: 'POST',
             data: {
                 csrfmiddlewaretoken: csrftoken
@@ -63,23 +64,3 @@ $(document).ready(function() {
     })
 
 });
-
-/*
-
-
-
-  invoke = (event) => {
-    let nameOfFunction = this[event.target.name];
-    let arg1 = event.target.getAttribute('data-arg1');
-    if (elem.value=="Marcar como leido") {
-        elem.value = "Marcar como no leido";
-    }
-    else elem.value = "Marcar como leido";
-}
-    // We can add more arguments as needed...
-    window[nameOfFunction](arg1)
-    // Hope the function is in the window.
-    // Else the respective object need to be used
-  }
-
-   */

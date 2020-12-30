@@ -17,9 +17,6 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 
-from myrss import settings
-
-from myrss.views.home_view import HomeView
 from myrss.views.welcome_view import WelcomeView
 from myrss.views.signup_view import SignUpView
 from myrss.views.home_view import HomeView
@@ -27,7 +24,8 @@ from myrss.views.new_subscription_view import NewSubscriptionView
 from myrss.views.show_articles_view import ShowArticlesView
 from myrss.views.update_subscription_view import UpdateSubscriptionView
 from myrss.views.delete_subscription_view import DeleteSubscriptionView
-from myrss.views.toggle_read_view import ToggleRead
+from myrss.views.api.toggle_read_view import ToggleRead
+from myrss.views.api.set_read_view import SetRead
 
 
 urlpatterns = [
@@ -46,4 +44,5 @@ urlpatterns = [
     url(r'update_subscription/(?P<subscription_id>\d+)/$', UpdateSubscriptionView.as_view(), name="update_subscription"),
     url(r'delete_subscription/(?P<subscription_id>\d+)/$', DeleteSubscriptionView.as_view(), name="delete_subscription"),
     url(r'toggle_read/(?P<article_id>\d+)/$', ToggleRead.as_view(), name="toggle_read"),
+    url(r'set_read/(?P<article_id>\d+)/$', SetRead.as_view(), name="set_read"),
 ]

@@ -16,7 +16,7 @@
                     {% for a, a_read, buttonid in articles %}
 
 
-                        <li class = "article">
+                        <li class = "article {% if a_read %}read-article{% endif %}">
 
                         <div class = "article-image">
                             {% if a.img_link %}
