@@ -15,13 +15,13 @@ def subscription_article_read_status(user_id, article_id):
 
 
 
-class ToggleReadTests(TestCase):
+class ToggleOrSetReadTests(TestCase):
     def setUp(self):
         test_user = User.objects.get_or_create(username='testuser')
         self.client.force_login(test_user[0])
         self.user = User.objects.get(username='testuser')
 
-    def test_user_article_is_toggled(self):
+    def test_user_article_is_marked_read_when_toggled(self):
         response = self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/clarinrss.xml"}
         )
@@ -78,3 +78,46 @@ class ToggleReadTests(TestCase):
         )
 
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+
+    def test_setting_article_as_read_marks_it_as_read(self):
+        response = self.client.post(
+            "/new_subscription", follow=True, data={"link": "test_utils/clarinrss.xml"}
+        )
+        article_id = 1
+
+        response = self.client.post(
+            "/set_read/" + str(article_id) + "/", follow=True, data={}
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTrue(subscription_article_read_status(self.user, article_id))
+
+    def test_setting_article_as_read_twice_marks_it_as_read(self):
+        response = self.client.post(
+            "/new_subscription", follow=True, data={"link": "test_utils/clarinrss.xml"}
+        )
+        article_id = 1
+
+        response = self.client.post(
+            "/set_read/" + str(article_id) + "/", follow=True, data={}
+        )
+        response = self.client.post(
+            "/set_read/" + str(article_id) + "/", follow=True, data={}
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTrue(subscription_article_read_status(self.user, article_id))
+
+    def test_setting_article_does_not_set_others(self):
+        response = self.client.post(
+            "/new_subscription", follow=True, data={"link": "test_utils/clarinrss.xml"}
+        )
+        article_id_to_set_read = 1
+        article_id_to_not_set_read = 2
+
+        self.assertFalse(subscription_article_read_status(self.user, article_id_to_not_set_read))
+        response = self.client.post(
+            "/set_read/" +str(article_id_to_set_read) + "/", follow=True, data={}
+        )
+
+        self.assertFalse(subscription_article_read_status(self.user, article_id_to_not_set_read))
