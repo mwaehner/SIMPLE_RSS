@@ -25,7 +25,7 @@ class Subscription(models.Model):
         url = self.link
         news_feed = feedparser.parse(url)
         added_no = 0
-        #we traverse the news in reversed order add the most recent news at the last rows
+        #we traverse the news in reversed order to add the most recent news at the last rows
         for i in range(len(news_feed.entries)-1,-1,-1):
             newlinks = news_feed.entries[i].get('links')
             imglink = ""
