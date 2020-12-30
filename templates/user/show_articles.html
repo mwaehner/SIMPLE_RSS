@@ -13,7 +13,7 @@
 
             {% if articles %}
                 <ul id="articlesList">
-                    {% for a, a_read, buttonid in articles %}
+                    {% for a, a_read in articles %}
 
 
                         <li class = "article {% if a_read %}read-article{% endif %}">

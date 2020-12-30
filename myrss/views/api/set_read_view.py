@@ -20,7 +20,7 @@ class SetRead(View):
     def post(self, request, article_id):
         subscription_article = SubscriptionArticle.objects.filter(subscription__owner=self.request.user, article=article_id)
         if subscription_article.exists():
-            subscription_article_to_toggle= subscription_article.get()
+            subscription_article_to_toggle = subscription_article.get()
             subscription_article_to_toggle.read = True
             subscription_article_to_toggle.save()
             data = {'success': 'set as read'}

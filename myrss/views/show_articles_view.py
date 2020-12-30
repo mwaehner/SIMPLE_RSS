@@ -21,8 +21,8 @@ class ShowArticlesView(View):
         articles = subscription.article_set.all()
         articles_no = min(10, len(articles))
         last_articles_content = [articles[len(articles)-i-1] for i in range(articles_no)]
-        last_articles_readStatus = [SubscriptionArticle.objects.filter(article=last_articles_content[i])[0].read for i in range(articles_no)]
-        last_articles = zip(last_articles_content, last_articles_readStatus, ["set_read"+str(i) for i in range(articles_no)])
+        last_articles_readStatus = [SubscriptionArticle.objects.get(article=last_articles_content[i].id, subscription=subscription_id).read for i in range(articles_no)]
+        last_articles = zip(last_articles_content, last_articles_readStatus)
 
         return render(request, 'user/show_articles.html', {'articles': last_articles, })
 
