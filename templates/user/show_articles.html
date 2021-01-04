@@ -11,24 +11,24 @@
 
     <h2>Last articles</h2>
 
-            {% if articles %}
+            {% if subscription_articles %}
                 <ul id="articlesList">
-                    {% for article, article_is_read in articles %}
+                    {% for subscription_article in subscription_articles %}
 
 
-                        <li class = "article" data-read={{ article_is_read }} data-article-id={{ article.id }}>
+                        <li class = "article" data-read={{ subscription_article.read }} data-article-id={{ subscription_article.article.id }}>
 
                         <div class = "article-image">
-                            {% if article.img_link %}
-                                <img src={{ article.img_link }} height="150" width="250" border="5px">
+                            {% if  subscription_article.article.img_link %}
+                                <img src={{  subscription_article.article.img_link }} height="150" width="250" border="5px">
                             {% else %}
                                 <img src="{% static "images/default_new_image.jpeg" %}" height="150" width="250" border="5px">
                             {% endif %}
                         </div>
                         <div class = "article-text">
-                            <a href={{article.link}}  target=”_blank”> <h3>{{ article.title }}</h3> </a>
-                            {% if article.summary %}
-                                <p>{{ article.summary }}</p>
+                            <a href={{ subscription_article.article.link}}  target=”_blank”> <h3>{{  subscription_article.article.title }}</h3> </a>
+                            {% if  subscription_article.article.summary %}
+                                <p>{{  subscription_article.article.summary }}</p>
                             {% endif %}
                             <div class="readstatus">
                             <button class="toggle-unread" >

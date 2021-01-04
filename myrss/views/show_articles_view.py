@@ -16,12 +16,7 @@ from myrss.models.subscription import Subscription
 class ShowArticlesView(View):
     @method_decorator(login_required)
     def get(self, request, subscription_id):
-        subscription = Subscription.objects.get(id=subscription_id, owner=request.user)
         articles_number_to_show = 10
-        last_articles_content = subscription.article_set.order_by('-created_at').all()[:articles_number_to_show]
-        last_articles_read_status = [
-            SubscriptionArticle.objects.get(article=last_articles_content[i].id, subscription=subscription_id).read for i in range(articles_number_to_show)
-        ]
-        last_articles = zip(last_articles_content, last_articles_read_status)
-        return render(request, 'user/show_articles.html', {'articles': last_articles})
+        last_articles = SubscriptionArticle.objects.filter(subscription=subscription_id).order_by('-article__created_at').all()[:articles_number_to_show]
+        return render(request, 'user/show_articles.html', {'subscription_articles': last_articles})
 
