@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 
 from myrss.models.article import Article
-from myrss.models.article import SubscriptionArticle
+from myrss.models.subscription_article import SubscriptionArticle
 from myrss.models.subscription import Subscription
 
 
