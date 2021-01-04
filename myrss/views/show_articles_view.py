@@ -8,6 +8,7 @@ import feedparser
 
 from myrss.forms.subscription_form import SubscriptionForm
 from myrss.models.article import Article
+from myrss.models.subscription_article import SubscriptionArticle
 from myrss.models.subscription import Subscription
 
 
@@ -15,8 +16,7 @@ from myrss.models.subscription import Subscription
 class ShowArticlesView(View):
     @method_decorator(login_required)
     def get(self, request, subscription_id):
-        subscription = Subscription.objects.get(id=subscription_id, owner=request.user)
         articles_number_to_show = 10
-        last_articles = subscription.article_set.order_by('-created_at').all()[:articles_number_to_show]
-        return render(request, 'user/show_articles.html', {'articles': last_articles})
+        last_articles = SubscriptionArticle.objects.filter(subscription=subscription_id).order_by('-article__created_at').all()[:articles_number_to_show]
+        return render(request, 'user/show_articles.html', {'subscription_articles': last_articles})
 

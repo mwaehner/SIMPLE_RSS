@@ -13,17 +13,17 @@
     <ul>
             {% if subscriptions %}
 
-                    {% for s in subscriptions %}
+                    {% for subscription in subscriptions %}
                         <li>
-                        <p>{{ s.name }}</p>
-                            <form method="get"  style="display:inline;" action="{% url 'show_articles' subscription_id=s.id %}">
+                        <p>{{ subscription.name }}</p>
+                            <form method="get"  style="display:inline;" action="{% url 'show_articles' subscription_id=subscription.id %}">
                                 <button type="submit" class="btn btn-primary" >View</button>
                             </form>
-                            <form method="post" style="display:inline;"  action="{% url 'update_subscription' subscription_id=s.id %}">
+                            <form method="post" style="display:inline;"  action="{% url 'update_subscription' subscription_id=subscription.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-primary" >Update</button>
                             </form>
-                            {% include "modals/delete_confirmation.html" with subs_id=s.id%}
+                            {% include "modals/delete_confirmation.html" with subs_id=subscription.id%}
                             <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#confirmDeleteModal">Delete</button>
                         </li>
 

@@ -1,12 +1,17 @@
 from django.contrib import admin
 from .models.subscription import Subscription
 from .models.article import Article
+from .models.subscription_article import SubscriptionArticle
 from django.db import models
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('id', 'owner', 'link', 'name')
 
+
+@admin.register(SubscriptionArticle)
+class SubscriptionArticleAdmin(admin.ModelAdmin):
+    list_display = ('id', 'article', 'subscription', 'read')
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
