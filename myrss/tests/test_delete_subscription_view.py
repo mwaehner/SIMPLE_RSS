@@ -15,18 +15,16 @@ class DeleteSubscriptionViewTests(TestCase):
         self.user = User.objects.get(username='testuser')
 
 
-    def test_subscription_count_decreases_when_deleting_subscription(self):
+    def test_cannot_find_subscription_after_deleting_it(self):
         response = self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/clarinrss.xml"}
         )
-        subscriptions_no_before = get_subscription_count_for(self.user)
         subscription_id = Subscription.objects.get(owner=self.user).id
 
         response = self.client.post(
             "/delete_subscription/" + str(subscription_id) + '/', follow=True, data={}
         )
-        subscriptions_no_after = get_subscription_count_for(self.user)
-        self.assertEqual(subscriptions_no_after+1, subscriptions_no_before)
+        self.assertFalse(Subscription.objects.filter(pk=subscription_id))
 
     def test_deleting_subscription_from_user_does_not_delete_other_users_subscriptions(self):
         response = self.client.post(
