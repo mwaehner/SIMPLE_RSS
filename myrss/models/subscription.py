@@ -25,20 +25,21 @@ class Subscription(models.Model):
         url = self.link
         news_feed = feedparser.parse(url)
         added_article_count = 0
-        #more recent news are at the beginning
-        for i in range(len(news_feed.entries)-1,-1,-1):
-            newlinks = news_feed.entries[i].get('links')
+        #more recent news are at the beginning, we traverse in reversed order so that older articles are created in the DB first
+        for entry in reversed(news_feed.entries):
+            new_links = entry.get('links')
             imglink = ""
-            for j in range(len(newlinks)):
-                if newlinks != None and len(newlinks) > 0 and re.match('image', newlinks[j].get('type')):
-                    imglink = newlinks[j].get('href')
+            if new_links:
+                for new_link in new_links:
+                    if re.match('image', new_link.get('type')):
+                        imglink = new_link.get('href')
             (article, was_created) = Article.objects.get_or_create(
-                link=news_feed.entries[i].get('link'),
+                link=entry.get('link'),
             )
             if not self.article_set.filter(link=article.link).exists():
-                added_article_count+=1
-            article.title = news_feed.entries[i].get('title')
-            article.summary = news_feed.entries[i].get('summary')
+                added_article_count += 1
+            article.title = entry.get('title')
+            article.summary = entry.get('summary')
             article.img_link = imglink
             article.save()
             article.subscriptions.add(self)

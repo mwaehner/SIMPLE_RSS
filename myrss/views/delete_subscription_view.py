@@ -12,9 +12,9 @@ from myrss.models.subscription import Subscription
 class DeleteSubscriptionView(View):
     @method_decorator(login_required)
     def post(self, request, subscription_id):
-        subscription = Subscription.objects.get(pk=int(subscription_id))
-        for a in subscription.article_set.all():
-            if len(a.subscriptions.all()) == 1:
-                a.delete()
+        subscription = Subscription.objects.get(pk=subscription_id)
+        for article in subscription.article_set.all():
+            if len(article.subscriptions.all()) == 1:
+                article.delete()
         subscription.delete()
         return redirect('user_home')

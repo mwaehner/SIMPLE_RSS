@@ -16,7 +16,7 @@ class ShowArticlesView(View):
     @method_decorator(login_required)
     def get(self, request, subscription_id):
         subscription = Subscription.objects.get(id=subscription_id, owner=request.user)
-        articles_number_to_show = min(len(subscription.article_set.all()), 10)
+        articles_number_to_show = 10
         last_articles_content = subscription.article_set.order_by('-created_at').all()[:articles_number_to_show]
         last_articles_readStatus = [
             SubscriptionArticle.objects.get(article=last_articles_content[i].id, subscription=subscription_id).read for i in range(articles_number_to_show)
