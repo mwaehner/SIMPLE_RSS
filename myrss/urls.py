@@ -25,6 +25,7 @@ from myrss.views.signup_view import SignUpView
 from myrss.views.home_view import HomeView
 from myrss.views.new_subscription_view import NewSubscriptionView
 from myrss.views.show_articles_view import ShowArticlesView
+from myrss.views.update_subscription_view import UpdateSubscriptionView
 
 
 
@@ -41,4 +42,5 @@ urlpatterns = [
     url(r'^signup$', SignUpView.as_view(), name='user_signup'),
     url(r'new_subscription$', NewSubscriptionView.as_view(), name="new_subscription"),
     url(r'show_articles/(?P<subscription_id>\d+)/$', ShowArticlesView.as_view(), name="show_articles"),
+    url(r'update_subscription/(?P<subscription_id>\d+)/$', UpdateSubscriptionView.as_view(), name="update_subscription"),
 ]

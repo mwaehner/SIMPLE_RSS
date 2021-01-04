@@ -12,5 +12,4 @@ class HomeView(View):
     @method_decorator(login_required)
     def get(self, request):
         user_subscriptions = Subscription.objects.subscriptions_for_user(request.user)
-        subscription_form = SubscriptionForm()
-        return render(request, 'user/home.html', {'subscription_form': subscription_form, 'subscriptions': user_subscriptions})
+        return render(request, 'user/home.html', {'subscription_form': SubscriptionForm(), 'subscriptions': user_subscriptions})
