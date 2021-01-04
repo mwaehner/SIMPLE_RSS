@@ -15,7 +15,7 @@ def subscription_article_read_status(user_id, article_id):
 
 
 
-class ToggleOrSetReadTests(TestCase):
+class ToggleReadTests(TestCase):
     def setUp(self):
         test_user = User.objects.get_or_create(username='testuser')
         self.client.force_login(test_user[0])
