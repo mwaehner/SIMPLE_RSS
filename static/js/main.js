@@ -20,22 +20,22 @@ const csrftoken = getCookie('csrftoken');
 var toggle_read_status_on_button_click = {
     init : function () {
         $('.readstatus').on('click', 'button', function () {
-
-        if($(this).attr('data-read')=="True"){
-            $(this).text("marcar como leido")
-            $(this).attr('data-read', "False")
-            $(this).closest(".article").removeClass('read-article')
-        }
-        else {
-            $(this).text("marcar como no leido")
-            $(this).attr('data-read', "True")
-            $(this).closest(".article").addClass('read-article')
-        }
-
-        $.ajax('/toggle_read/' + $(this).data('article-id') + '/', {
+            var article = $(this).closest(".article")
+        $.ajax('/toggle_read/' + article.data('article-id') + '/', {
             type: 'POST',
             data: {
                 csrfmiddlewaretoken: csrftoken
+            },
+            success: function() {
+                if(article.attr('data-read')=="True"){
+                    article.attr('data-read', "False")
+                }
+                else {
+                    article.attr('data-read', "True")
+                }
+            },
+            error: function (request, status, error) {
+                alert(request.responseText);
             }
         })
 
@@ -47,17 +47,19 @@ var toggle_read_status_on_button_click = {
 var set_read_status_on_link_click = {
     init : function () {
         $('.article-text').on('click', 'a', function () {
-
-        var button = $(this).closest('.article-text').find('.toggle-unread')
-        button.text("marcar como no leido")
-        button.attr('data-read', "True")
-        $(this).closest(".article").addClass('read-article')
-        $.ajax('/set_read/' + button.data('article-id') + '/', {
-            type: 'POST',
-            data: {
-                csrfmiddlewaretoken: csrftoken
-            }
-        })
+            var article = $(this).closest(".article")
+            $.ajax('/set_read/' + article.data('article-id') + '/', {
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: csrftoken
+                },
+                success: function () {
+                    article.attr('data-read', "True")
+                },
+                error: function (request, status, error) {
+                    alert(request.responseText);
+                }
+            })
     })
     }
 }

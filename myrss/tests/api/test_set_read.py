@@ -7,7 +7,7 @@ from myrss.models.article import SubscriptionArticle
 from myrss.models.subscription import Subscription
 
 
-def subscription_article_read_status(user_id, article_id):
+def article_is_read(user_id, article_id):
     subscription_article = SubscriptionArticle.objects.filter(subscription__owner=user_id, article=article_id)
     return subscription_article.get().read
 
@@ -31,7 +31,7 @@ class SetReadTests(TestCase):
         )
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertTrue(subscription_article_read_status(self.user, article_id))
+        self.assertTrue(article_is_read(self.user, article_id))
 
     def test_setting_article_as_read_twice_marks_it_as_read(self):
         response = self.client.post(
@@ -47,7 +47,7 @@ class SetReadTests(TestCase):
         )
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertTrue(subscription_article_read_status(self.user, article_id))
+        self.assertTrue(article_is_read(self.user, article_id))
 
     def test_setting_article_does_not_set_others(self):
         response = self.client.post(
@@ -56,12 +56,12 @@ class SetReadTests(TestCase):
         article_id_to_set_read = 1
         article_id_to_not_set_read = 2
 
-        self.assertFalse(subscription_article_read_status(self.user, article_id_to_not_set_read))
+        self.assertFalse(article_is_read(self.user, article_id_to_not_set_read))
         response = self.client.post(
             "/set_read/" +str(article_id_to_set_read) + "/", follow=True, data={}
         )
 
-        self.assertFalse(subscription_article_read_status(self.user, article_id_to_not_set_read))
+        self.assertFalse(article_is_read(self.user, article_id_to_not_set_read))
 
     def test_setting_article_does_not_impact_other_users_articles(self):
         response = self.client.post(
@@ -80,5 +80,5 @@ class SetReadTests(TestCase):
         response = self.client.post(
             "/set_read/" + str(article_id_to_toggle_read) + "/", follow=True, data={}
         )
-        self.assertTrue(subscription_article_read_status(self.user, article_id_to_toggle_read))
-        self.assertFalse(subscription_article_read_status(old_user, article_id_to_toggle_read))
+        self.assertTrue(article_is_read(self.user, article_id_to_toggle_read))
+        self.assertFalse(article_is_read(old_user, article_id_to_toggle_read))

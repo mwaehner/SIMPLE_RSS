@@ -5,7 +5,7 @@ from django.db.models import DateTimeField
 
 
 class Article(models.Model):
-    subscriptions = models.ManyToManyField('myrss.Subscription', through='SubscriptionArticle')
+    subscriptions = models.ManyToManyField('myrss.Subscription', through='myrss.SubscriptionArticle')
     link = models.URLField(unique=True)
     img_link = models.URLField(blank=True, null=True)
     title = models.CharField(max_length=500)
@@ -15,7 +15,3 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
-class SubscriptionArticle(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
-    subscription= models.ForeignKey('myrss.Subscription', on_delete=models.CASCADE)
-    read = models.BooleanField(default=False)

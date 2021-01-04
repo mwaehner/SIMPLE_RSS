@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models.subscription import Subscription
-from .models.article import Article, SubscriptionArticle
+from .models.article import Article
+from .models.subscription_article import SubscriptionArticle
 from django.db import models
 
 @admin.register(Subscription)
