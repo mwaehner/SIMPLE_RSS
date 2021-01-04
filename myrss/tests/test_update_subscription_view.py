@@ -20,13 +20,13 @@ class UpdateSubscriptionViewTests(TestCase):
         )
         subscription = Subscription.objects.get(owner=self.user)
         subscription_id = subscription.id
-        article_no_before = len(subscription.article_set.all())
+        article_count_before = len(subscription.article_set.all())
 
         response = self.client.post(
             "/update_subscription/" + str(subscription_id) + '/', data={}
         )
-        article_no_after = len(Subscription.objects.get(owner=self.user).article_set.all())
-        self.assertEqual(article_no_after, article_no_before)
+        article_count_after = len(Subscription.objects.get(owner=self.user).article_set.all())
+        self.assertEqual(article_count_after, article_count_before)
 
     def test_updating_changed_subscription_brings_changes(self):
         response = self.client.post(
@@ -34,16 +34,24 @@ class UpdateSubscriptionViewTests(TestCase):
         )
         subscription = Subscription.objects.get(owner=self.user)
         subscription_id = subscription.id
-        article_no_before = len(subscription.article_set.all())
+        article_count_before = len(subscription.article_set.all())
         subscription.link = "test_utils/clarinrss-updated.xml"
         subscription.save()
-
+        added_number = 10
+        #some article's titles (first, third, fourth and last)
+        new_articles_titles = ["David Lamelas batalla por una obra nómade",
+                               "Jubilados: los 4 puntos más conflictivos de la nueva ley de movilidad",
+                               '''Para las Iglesias Evangélicas, "la Argentina retrocedió siglos" con la legalización del aborto''',
+                               '''Quiniela de la Ciudad: resultado del sorteo de la Matutina de hoy, miércoles 30 de diciembre'''
+                               ]
 
         response = self.client.post(
             "/update_subscription/" + str(subscription_id) + '/', data={}
         )
-        article_no_after = len(Subscription.objects.get(owner=self.user).article_set.all())
-        self.assertGreater(article_no_after, article_no_before )
+        article_count_after = len(Subscription.objects.get(owner=self.user).article_set.all())
+        self.assertEqual(article_count_after, article_count_before +added_number)
+        for article_title in new_articles_titles:
+            self.assertTrue(Article.objects.filter(title=article_title).exists())
 
 
     def test_updating_changed_subscription_brings_no_changes_for_other_users(self):
@@ -59,7 +67,7 @@ class UpdateSubscriptionViewTests(TestCase):
         )
         subscription = Subscription.objects.get(owner=old_user)
         subscription_id = subscription.id
-        article_no_before = len(subscription.article_set.all())
+        article_count_before = len(subscription.article_set.all())
 
         subscription2 = Subscription.objects.get(owner=self.user)
         subscription2_id = subscription2.id
@@ -70,5 +78,5 @@ class UpdateSubscriptionViewTests(TestCase):
         response = self.client.post(
             "/update_subscription/" + str(subscription2_id) + '/', data={}
         )
-        article_no_after = len(Subscription.objects.get(owner=old_user).article_set.all())
-        self.assertEqual(article_no_after, article_no_before )
+        article_count_after = len(Subscription.objects.get(owner=old_user).article_set.all())
+        self.assertEqual(article_count_after, article_count_before )

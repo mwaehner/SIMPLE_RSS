@@ -15,7 +15,7 @@ class DeleteSubscriptionViewTests(TestCase):
         self.user = User.objects.get(username='testuser')
 
 
-    def test_subscription_no_decreases_when_deleting_subscription(self):
+    def test_subscription_count_decreases_when_deleting_subscription(self):
         response = self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/clarinrss.xml"}
         )
@@ -32,6 +32,7 @@ class DeleteSubscriptionViewTests(TestCase):
         response = self.client.post(
             "/new_subscription", follow=True, data={"link": "test_utils/clarinrss.xml"}
         )
+        old_user = User.objects.get(username='testuser')
         subscriptions_no_before = get_subscription_count_for(self.user)
         another_test_user = User.objects.get_or_create(username='testuser2')
         self.client.force_login(another_test_user[0])
@@ -44,8 +45,8 @@ class DeleteSubscriptionViewTests(TestCase):
         response = self.client.post(
             "/delete_subscription/" + str(subscription_id) + '/', follow=True, data={}
         )
-
-        subscriptions_no_after = get_subscription_count_for(User.objects.get(username='testuser'))
+        subscriptions_no_after = get_subscription_count_for(old_user)
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(subscriptions_no_before, subscriptions_no_after)
+        self.assertEqual(Subscription.objects.get(owner=old_user).link, "test_utils/clarinrss.xml")

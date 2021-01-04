@@ -14,7 +14,7 @@ class SubscriptionArticleAdmin(admin.ModelAdmin):
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'link', 'title', 'subscriptions_no')
+    list_display = ('id', 'link', 'title', 'subscriptions_count')
 
     def get_queryset(self, request):
         qs = super(ArticleAdmin, self).get_queryset(request)
@@ -22,7 +22,7 @@ class ArticleAdmin(admin.ModelAdmin):
         return qs
 
     # useful for checking that we have no 0-subscription articles floating around the database
-    def subscriptions_no(self, obj):
+    def subscriptions_count(self, obj):
         return obj.subscriptions__count
 
-    subscriptions_no.admin_order_field = 'subscriptions__count'
+    subscriptions_count.admin_order_field = 'subscriptions__count'

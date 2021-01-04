@@ -15,14 +15,12 @@ from myrss.models.subscription import Subscription
 class ShowArticlesView(View):
     @method_decorator(login_required)
     def get(self, request, subscription_id):
-        subscription = Subscription.objects.get(id=subscription_id)
-        if not request.user == subscription.owner:
-            raise PermissionDenied
-        articles = subscription.article_set.all()
-        articles_no = min(10, len(articles))
-        last_articles_content = [articles[len(articles)-i-1] for i in range(articles_no)]
-        last_articles_readStatus = [SubscriptionArticle.objects.get(article=last_articles_content[i].id, subscription=subscription_id).read for i in range(articles_no)]
+        subscription = Subscription.objects.get(id=subscription_id, owner=request.user)
+        articles_number_to_show = min(len(subscription.article_set.all()), 10)
+        last_articles_content = subscription.article_set.order_by('-created_at').all()[:articles_number_to_show]
+        last_articles_readStatus = [
+            SubscriptionArticle.objects.get(article=last_articles_content[i].id, subscription=subscription_id).read for i in range(articles_number_to_show)
+        ]
         last_articles = zip(last_articles_content, last_articles_readStatus)
-
-        return render(request, 'user/show_articles.html', {'articles': last_articles, })
+        return render(request, 'user/show_articles.html', {'articles': last_articles})
 
