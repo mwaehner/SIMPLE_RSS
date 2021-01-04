@@ -25,7 +25,7 @@ class Subscription(models.Model):
         url = self.link
         news_feed = feedparser.parse(url)
         added_article_count = 0
-        #more recent news are at the beginning, we traverse in reversed order so that newer articles are created in the DB first
+        #more recent news are at the beginning, we traverse in reversed order so that older articles are created in the DB first
         for entry in reversed(news_feed.entries):
             new_links = entry.get('links')
             imglink = ""
