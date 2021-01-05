@@ -24,7 +24,7 @@
                                 <button type="submit" class="btn btn-primary" >Update</button>
                             </form>
                             {% include "modals/delete_confirmation.html" with subs_id=subscription.id%}
-                            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#confirmDeleteModal">Delete</button>
+                            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#confirmDeleteModal{{ subscription.id }}">Delete</button>
                         </li>
 
                         <br>
