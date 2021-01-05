@@ -19,7 +19,7 @@ class SubscriptionArticleAdmin(admin.ModelAdmin):
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'link', 'title', 'subscriptions_count')
+    list_display = ('id', 'title', 'link', 'subscriptions_count')
     list_filter = ('subscriptions__name',)
     search_fields = ['title']
 
