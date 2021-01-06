@@ -6,8 +6,10 @@ from http import HTTPStatus
 import feedparser
 import re
 
+from myrss.forms.folder_form import FolderForm
 from myrss.forms.subscription_form import SubscriptionForm
 from myrss.models.article import Article
+from myrss.models.folder import Folder
 from myrss.models.subscription import Subscription
 
 
@@ -22,7 +24,9 @@ class NewSubscriptionView(View):
             return redirect('user_home')
 
         user_subscriptions = Subscription.objects.subscriptions_for_user(request.user)
-        return render(request, 'user/home.html', {'subscription_form': new_subscription_form, 'subscriptions': user_subscriptions}, status=HTTPStatus.BAD_REQUEST)
+        folders = Folder.objects.filter(owner=request.user)
+        return render(request, 'user/home.html', {'subscription_form': new_subscription_form, 'folder_form': FolderForm(), 'subscriptions': user_subscriptions,
+                                                  'folders': folders}, status=HTTPStatus.BAD_REQUEST)
 
 
 
