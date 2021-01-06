@@ -14,7 +14,10 @@ class SubscriptionForm(ModelForm):
         url = self.cleaned_data.get("link")
         if not url:
             raise ValidationError("Please submit a nonempty link")
-        news_feed = feedparser.parse(url)
+        try:
+            news_feed = feedparser.parse(url)
+        except:
+            raise ValidationError("Not a valid rss feed")
         if news_feed.bozo: # news_feed.bozo se setea cuando el parsing falla
             raise ValidationError("Not a valid rss feed")
         with_this_link = Subscription.objects.filter(owner = self.instance.owner, link = url)
