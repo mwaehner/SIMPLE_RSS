@@ -14,16 +14,13 @@ def _is_valid_rss_feed(url):
         return False
     if news_feed.bozo:  # news_feed.bozo se setea cuando el parsing falla
         return False
-    if not (news_feed.get('feed') and news_feed.get('feed').get('title')):
-        return False
-    return True
+    return news_feed.get('feed') and news_feed.get('feed').get('title')
 
 def _create_subscription_and_fetch_articles(user, url, name):
     with_this_link = Subscription.objects.filter(owner=user, link=url)
     if with_this_link.exists():
         return
     subscription = Subscription.objects.create(owner = user, link=url, name=name)
-    subscription.save()
     subscription.get_last_articles()
 
 
@@ -47,7 +44,7 @@ class Command(BaseCommand):
         if options['user_ids']:
             user_list = options['user_ids']
         else:
-            user_list = [user.id for user in User.objects.all()]
+            user_list = User.objects.values_list('id', flat=True)
         for user_id in user_list:
             self.stdout.write('Importing subscriptions for user %s' % user_id)
             try:
