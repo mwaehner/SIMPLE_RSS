@@ -67,14 +67,22 @@ var set_read_status_on_link_click = {
 var add_to_folder_on_click = {
     init : function () {
         $('#add_to_folder_button').on('click', function () {
-            //alert("blabla")
             var selected = [];
             $('#subscriptions input:checked').each(function() {
                 selected.push($(this).data('subscription-id'));
-                //alert($(this).data('subscription-id'))
             });
-            folderName = $("#folder_selection option:selected").text();
-            //var article = $(this).closest(".article")
+            to_show_modal = $('#genericModal')
+            if(!selected.length){
+                to_show_modal.find('.modal-body').text("Please select at least one subscription");
+                to_show_modal.modal('show');
+                return;
+            }
+            var folderName = $("#folder_selection option:selected").text();
+            if(folderName==="-"){
+                to_show_modal.find('.modal-body').text("Please select a folder");
+                to_show_modal.modal('show');
+                return;
+            }
             $.ajax('/add_subscriptions_to_folder', {
                 type: 'POST',
                 data: {
@@ -83,21 +91,49 @@ var add_to_folder_on_click = {
                     csrfmiddlewaretoken: csrftoken
                 },
                 success: function () {
-                    alert("Successfully added to folder")
+                    $('#subscriptions input:checked').each(function() {
+                        selected.push($(this).data('subscription-id'));
+                        var new_folder_html_elem = $("<span class='folder-name' name=" + folderName + "></span>").text(folderName);
+                        var folders = $(this).next(".folders")
+                        var withThisname = folders.find("span[name='" + folderName + "']")
+                        if(! withThisname.length){
+                            folders.append(new_folder_html_elem)
+                        }
+                    });
+                    to_show_modal.find('.modal-body').text("Success: subscriptions added to folder")
+                    to_show_modal.modal('show');
+
                 },
                 error: function (request, status, error) {
-                    alert(request.responseText);
+                    to_show_modal.find('.modal-body').text(request.responseText)
+                    to_show_modal.modal('show');
                 }
             })
     })
     }
 }
 
+var change_selected_number_on_check = {
+    init : function () {
+        $('#subscriptions :checkbox').change(function() {
+            var selectedNumber = $('#selectedNumber');
+            var selectedNumberAsInt = parseInt(selectedNumber.text());
+            if (this.checked) {
+                selectedNumber.text(selectedNumberAsInt+1)
+            } else {
+                selectedNumber.text(selectedNumberAsInt-1)
+            }
+        });
+    }
+}
+
+
 
 $(document).ready( function() {
     toggle_read_status_on_button_click.init()
     set_read_status_on_link_click.init()
     add_to_folder_on_click.init()
+    change_selected_number_on_check.init()
     $('form').submit(function() {
         $(this).find("button[type='submit']").prop('disabled',true);
     });
