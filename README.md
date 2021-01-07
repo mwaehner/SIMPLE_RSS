@@ -43,7 +43,18 @@ Corriendo los tests
 
 1- ```python manage.py test```
 
+Comandos personalizados
 
+-importsubscriptions: importa suscripciones que esten descritas en un archivo en formato OPML, como el de test_utils/opml_subscriptions.xml. 
+Se usa así:
+
+```python manage.py importsubscriptions --subscriptions <opml file> --user_ids <userid> <userid> ... <userid>```
+
+Por ejemplo:
+
+```python manage.py importsubscriptions --subscriptions test_utils/opml_subscriptions.xml --user_ids 2```
+
+Si no se especifica ningún user_id, se importarán las suscripciones para todos los usuarios.
 
 
 

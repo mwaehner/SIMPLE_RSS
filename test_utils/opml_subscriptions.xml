@@ -1,11 +1,8 @@
 <opml version="2.0">
 	<body>
 		<outline text="Subscriptions" title="Subscriptions">
-			<outline title="The Verge" xmlUrl='http://www.theverge.com/rss/index.xml' />
-<outline title="Tech Crunch" xmlUrl='https://techcrunch.com/feed/' />
-<outline title="Hollywood Reporter" xmlUrl='http://feeds.mashable.com/Mashable' />
-<outline title="Engadget" xmlUrl='http://www.engadget.com/rss.xml' />
-	
+			<outline title="Clarin - Lo último" xmlUrl='test_utils/clarinrss.xml' />
+<outline title="Página 12" xmlUrl='test_utils/pagina12rss.xml' />	
 		</outline>
 	</body>
 </opml>
