@@ -127,16 +127,48 @@ var change_selected_number_on_check = {
     }
 }
 
+var add_new_folder_on_click = {
+    init : function () {
+        to_show_modal = $('#genericModal')
+        modal_body = to_show_modal.find('.modal-body')
+        $('#folder_form').on('submit', function() {
+            event.preventDefault();
+            var form = $(this)
+            $.ajax(form.attr('action'),{
+                type: 'POST',
+                data: form.serialize(),
+                success: function (result){
+                    modal_body.text("Success: added new folder")
+                    var newOption = $('<option></option>')
+                    var folderName = form.serializeArray()[0]['value']
+                    newOption.append(folderName)
+                    newOption.attr('name',folderName )
+                    $('#folder_selection').append(newOption)
+                },
+                error: function (result){
+                    modal_body.text("Failure: folder already exists")
+                },
+                csrfmiddlewaretoken: csrftoken
+            })
+            to_show_modal.modal('show');
+            $(this).find("button[type='submit']").removeProp('disabled')
+
+        });
+    }
+}
+
 
 
 $(document).ready( function() {
-    toggle_read_status_on_button_click.init()
-    set_read_status_on_link_click.init()
-    add_to_folder_on_click.init()
-    change_selected_number_on_check.init()
     $('form').submit(function() {
         $(this).find("button[type='submit']").prop('disabled',true);
     });
+    toggle_read_status_on_button_click.init()
+    set_read_status_on_link_click.init()
+    add_to_folder_on_click.init()
+    add_new_folder_on_click.init()
+    change_selected_number_on_check.init()
+
     $('#showUpdatedNoModal').modal('show');
 
 });

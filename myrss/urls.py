@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 
 from myrss.views.api.add_subscriptions_to_folder_view import AddSubscriptionsToFolder
-from myrss.views.new_folder_view import NewFolderView
+from myrss.views.api.new_folder_view import NewFolderView
 from myrss.views.welcome_view import WelcomeView
 from myrss.views.signup_view import SignUpView
 from myrss.views.home_view import HomeView

@@ -35,6 +35,6 @@ class AddSubscriptionsToFolder(View):
                 status_code = status.HTTP_400_BAD_REQUEST
                 return JsonResponse(data, status=status_code)
             folder.subscriptions.add(subscription)
-        data = {'success': 'toggled read'}
+        data = {'success': 'added subscriptions to folder'}
         status_code = status.HTTP_200_OK
         return JsonResponse(data, status=status_code)
