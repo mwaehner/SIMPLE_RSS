@@ -1,10 +1,14 @@
+{% load static %}
+
 <!–Delete button will redirect to the href of the element with 'id = caller-id' property in this modal–>
-<div class="modal fade" id="genericModal" tabindex="-1" caller-id="" role="dialog" aria-labelledby="genericModal" aria-hidden="true">
+<div class="modal fade" id="successModal" tabindex="-1" caller-id="" role="dialog" aria-labelledby="genericModal" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body">
+        Success
       </div>
       <div class="modal-footer">
+          <img class = "status_icon" src="{% static "images/success_icon" %}">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>

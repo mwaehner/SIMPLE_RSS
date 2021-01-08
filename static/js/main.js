@@ -71,7 +71,7 @@ var add_to_folder_on_click = {
             $('#subscriptions input:checked').each(function() {
                 selected.push($(this).data('subscription-id'));
             });
-            to_show_modal = $('#genericModal')
+            var to_show_modal = $('#genericModal')
             if(!selected.length){
                 to_show_modal.find('.modal-body').text("Please select at least one subscription");
                 to_show_modal.modal('show');
@@ -87,7 +87,7 @@ var add_to_folder_on_click = {
                 type: 'POST',
                 data: {
                     folder: folderName,
-                    subscriptions: JSON.stringify({ 'selectedSubscriptions': selected }),
+                    subscriptions: JSON.stringify(selected),
                     csrfmiddlewaretoken: csrftoken
                 },
                 success: function () {
@@ -100,15 +100,18 @@ var add_to_folder_on_click = {
                             folders.append(new_folder_html_elem)
                         }
                     });
+                    to_show_modal = $('#successModal')
                     to_show_modal.find('.modal-body').text("Success: subscriptions added to folder")
                     to_show_modal.modal('show');
 
                 },
                 error: function (request, status, error) {
+                    to_show_modal = $('#failureModal')
                     to_show_modal.find('.modal-body').text(request.responseText)
                     to_show_modal.modal('show');
                 }
             })
+
     })
     }
 }
@@ -129,8 +132,6 @@ var change_selected_number_on_check = {
 
 var add_new_folder_on_click = {
     init : function () {
-        to_show_modal = $('#genericModal')
-        modal_body = to_show_modal.find('.modal-body')
         $('#folder_form').on('submit', function() {
             event.preventDefault();
             var form = $(this)
@@ -138,7 +139,10 @@ var add_new_folder_on_click = {
                 type: 'POST',
                 data: form.serialize(),
                 success: function (result){
+                    var to_show_modal = $('#successModal')
+                    var modal_body = to_show_modal.find('.modal-body')
                     modal_body.text("Success: added new folder")
+                    to_show_modal.modal('show');
                     var newOption = $('<option></option>')
                     var folderName = form.serializeArray()[0]['value']
                     newOption.append(folderName)
@@ -146,11 +150,14 @@ var add_new_folder_on_click = {
                     $('#folder_selection').append(newOption)
                 },
                 error: function (result){
+                    var to_show_modal = $('#failureModal')
+                    var modal_body = to_show_modal.find('.modal-body')
                     modal_body.text("Failure: folder already exists")
+                    to_show_modal.modal('show');
                 },
                 csrfmiddlewaretoken: csrftoken
             })
-            to_show_modal.modal('show');
+
             $(this).find("button[type='submit']").removeProp('disabled')
 
         });

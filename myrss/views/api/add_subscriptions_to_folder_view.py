@@ -20,9 +20,9 @@ class AddSubscriptionsToFolder(View):
         data = request.POST
         folder_name = data['folder']
         subscriptions = data['subscriptions']
-        subscription_ids = json.loads(subscriptions)['selectedSubscriptions']
+        subscription_ids = json.loads(subscriptions)
         try:
-            folder = Folder.objects.get(name=folder_name)
+            folder = Folder.objects.get(owner=self.request.user, name=folder_name)
         except:
             data = {'failure': 'folder does not exist'}
             status_code = status.HTTP_400_BAD_REQUEST
