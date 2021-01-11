@@ -11,7 +11,7 @@ from myrss.models.folder import Folder
 from myrss.models.subscription import Subscription
 from django.http import JsonResponse
 
-class NewFolderView(View):
+class CreateFolderView(View):
     @method_decorator(login_required)
     def post(self, request):
         data = request.POST

@@ -19,8 +19,8 @@ class NewFolderViewTests(TestCase):
         )
         subscription = Subscription.objects.get()
         response = self.client.post(
-                "/add_subscriptions_to_folder", data={"folder": "politica",
-                                                       'subscriptions': str([subscription.id])
+                "/add_subscriptions_to_folder", data={"folderId": "0",
+                                                       'subscriptionIds': str([subscription.id])
                                                        }
         )
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
@@ -33,10 +33,11 @@ class NewFolderViewTests(TestCase):
         response = self.client.post(
             "/new_folder", data={"name": "politica"}
         )
+        folder_id = Folder.objects.get(name="politica").id
         subscription = Subscription.objects.get()
         response = self.client.post(
-            "/add_subscriptions_to_folder", data={"folder": "politica",
-                                                  'subscriptions': str([subscription.id])
+            "/add_subscriptions_to_folder", data={"folderId": str(folder_id),
+                                                  'subscriptionIds': str([subscription.id])
                                                   }
         )
         self.assertEqual(response.status_code, HTTPStatus.OK)
@@ -52,19 +53,38 @@ class NewFolderViewTests(TestCase):
         response = self.client.post(
             "/new_folder", data={"name": "eventos"}
         )
-
+        folder_id = Folder.objects.get(name="politica").id
         subscription = Subscription.objects.get()
         response = self.client.post(
-            "/add_subscriptions_to_folder", data={"folder": "politica",
-                                                  'subscriptions': str([subscription.id])
+            "/add_subscriptions_to_folder", data={"folderId": str(folder_id),
+                                                  'subscriptionIds': str([subscription.id])
                                                   }
         )
+        folder_id = Folder.objects.get(name="eventos").id
         response = self.client.post(
-            "/add_subscriptions_to_folder", data={"folder": "eventos",
-                                                  'subscriptions': str([subscription.id])
+            "/add_subscriptions_to_folder", data={"folderId": str(folder_id),
+                                                  'subscriptionIds': str([subscription.id])
                                                   }
         )
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertTrue(subscription.folder_set.filter(name="politica").exists())
         self.assertTrue(subscription.folder_set.filter(name="eventos").exists())
+
+
+''' este test no anda pero deberia andar (si hago lo mismo desde el browser, anda bien)
+    def test_non_existent_subscription_is_not_added_to_existent_folder(self):
+        response = self.client.post(
+            "/new_folder", data={"name": "politica"}
+        )
+        folder_id = Folder.objects.get(name="politica").id
+        response = self.client.post(
+            "/add_subscriptions_to_folder", data={"folderId": str(folder_id),
+                                                  'subscriptionIds': str([15141232])
+                                                  }
+        )
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+        self.assertFalse(Subscription.objects.all())
+        
+        '''
+

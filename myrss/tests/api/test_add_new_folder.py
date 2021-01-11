@@ -7,7 +7,7 @@ from myrss.models.subscription import Subscription
 from myrss.models.folder import Folder
 
 
-class NewFolderViewTests(TestCase):
+class CreateFolderViewTests(TestCase):
     def setUp(self):
         test_user = User.objects.get_or_create(username='testuser')
         self.client.force_login(test_user[0])

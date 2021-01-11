@@ -1,16 +1,14 @@
+{% extends "modals/base_modal.html" %}
 {% load static %}
 
-<!–Delete button will redirect to the href of the element with 'id = caller-id' property in this modal–>
-<div class="modal fade" id="failureModal" tabindex="-1" caller-id="" role="dialog" aria-labelledby="genericModal" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        Success
-      </div>
-      <div class="modal-footer">
-          <img class = "status_icon" src="{% static "images/error_icon.png" %}">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+
+    {% block modal-header %}
+        Failure
+    {% endblock %}
+    {% block modal-body %}
+         Failure message
+    {% endblock %}
+    {% block modal-footer %}
+        <img class = "status_icon" src="{% static "images/error_icon.png" %}">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    {% endblock %}

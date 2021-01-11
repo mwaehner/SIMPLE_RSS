@@ -23,10 +23,7 @@ class Subscription(models.Model):
 
     def get_last_articles(self):
         url = self.link
-        try:
-            news_feed = feedparser.parse(url)
-        except:
-            return 0
+        news_feed = feedparser.parse(url)
         added_article_count = 0
         #more recent news are at the beginning, we traverse in reversed order so that older articles are created in the DB first
         for entry in reversed(news_feed.entries):

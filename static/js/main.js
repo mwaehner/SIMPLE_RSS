@@ -17,7 +17,7 @@ const csrftoken = getCookie('csrftoken');
 
 
 
-var toggle_read_status_on_button_click = {
+var toggleReadStatusOnButtonClick = {
     init : function () {
         $('.readstatus').on('click', 'button', function () {
             var article = $(this).closest(".article")
@@ -44,7 +44,7 @@ var toggle_read_status_on_button_click = {
 
 }
 
-var set_read_status_on_link_click = {
+var setReadStatusOnLinkClick = {
     init : function () {
         $('.article-text').on('click', 'a', function () {
             var article = $(this).closest(".article")
@@ -64,51 +64,54 @@ var set_read_status_on_link_click = {
     }
 }
 
-var add_to_folder_on_click = {
+function showModalWithText(toShowModal, text){
+    toShowModal.find('.modal-body').text(text);
+    toShowModal.modal('show');
+}
+
+var addSubscriptionsToFolderOnClick = {
     init : function () {
         $('#add_to_folder_button').on('click', function () {
             var selected = [];
             $('#subscriptions input:checked').each(function() {
                 selected.push($(this).data('subscription-id'));
             });
-            var to_show_modal = $('#genericModal')
+            var toShowModal = $('#genericModal')
             if(!selected.length){
-                to_show_modal.find('.modal-body').text("Please select at least one subscription");
-                to_show_modal.modal('show');
+                showModalWithText(toShowModal, "Please select at least one subscription")
                 return;
             }
-            var folderName = $("#folder_selection option:selected").text();
-            if(folderName==="-"){
-                to_show_modal.find('.modal-body').text("Please select a folder");
-                to_show_modal.modal('show');
+            var folder = $("#folder_selection option:selected")
+            var folderId = folder.val();
+            if(!folderId){
+                showModalWithText(toShowModal, "Please select a folder")
                 return;
             }
             $.ajax('/add_subscriptions_to_folder', {
                 type: 'POST',
                 data: {
-                    folder: folderName,
-                    subscriptions: JSON.stringify(selected),
+                    folderId: folderId,
+                    subscriptionIds: JSON.stringify(selected),
                     csrfmiddlewaretoken: csrftoken
                 },
                 success: function () {
                     $('#subscriptions input:checked').each(function() {
+                        var folderName = folder.text()
                         selected.push($(this).data('subscription-id'));
-                        var new_folder_html_elem = $("<span class='folder-name' name=" + folderName + "></span>").text(folderName);
+                        var newFolderHtmlElement = $("<span class='folder-name' name=" + folderName + "></span>").text(folderName);
                         var folders = $(this).next(".folders")
                         var withThisname = folders.find("span[name='" + folderName + "']")
                         if(! withThisname.length){
-                            folders.append(new_folder_html_elem)
+                            folders.append(newFolderHtmlElement)
                         }
                     });
-                    to_show_modal = $('#successModal')
-                    to_show_modal.find('.modal-body').text("Success: subscriptions added to folder")
-                    to_show_modal.modal('show');
+                    toShowModal = $('#successModal')
+                    showModalWithText(toShowModal, "Subscriptions added to folder")
 
                 },
                 error: function (request, status, error) {
-                    to_show_modal = $('#failureModal')
-                    to_show_modal.find('.modal-body').text(request.responseText)
-                    to_show_modal.modal('show');
+                    toShowModal = $('#failureModal')
+                    showModalWithText(toShowModal, request.responseText)
                 }
             })
 
@@ -116,44 +119,38 @@ var add_to_folder_on_click = {
     }
 }
 
-var change_selected_number_on_check = {
+var changeSelectedNumberOnCheck = {
     init : function () {
         $('#subscriptions :checkbox').change(function() {
             var selectedNumber = $('#selectedNumber');
-            var selectedNumberAsInt = parseInt(selectedNumber.text());
-            if (this.checked) {
-                selectedNumber.text(selectedNumberAsInt+1)
-            } else {
-                selectedNumber.text(selectedNumberAsInt-1)
-            }
+            var checkedCheckboxesCount = $('input:checkbox:checked').length;
+            selectedNumber.text(checkedCheckboxesCount)
         });
     }
 }
 
-var add_new_folder_on_click = {
+var addNewFolderOnClick = {
     init : function () {
         $('#folder_form').on('submit', function() {
             event.preventDefault();
             var form = $(this)
+            var optionsCount = $('#folder_selection').children('option').length;
             $.ajax(form.attr('action'),{
                 type: 'POST',
                 data: form.serialize(),
                 success: function (result){
-                    var to_show_modal = $('#successModal')
-                    var modal_body = to_show_modal.find('.modal-body')
-                    modal_body.text("Success: added new folder")
-                    to_show_modal.modal('show');
+                    var toShowModal = $('#successModal')
+                    showModalWithText(toShowModal, "Added new folder")
                     var newOption = $('<option></option>')
                     var folderName = form.serializeArray()[0]['value']
                     newOption.append(folderName)
+                    CORREGIR ESTO: TIENE QUE DEVOLVER ID EN LA BD newOption.attr('value',optionsCount+1 )
                     newOption.attr('name',folderName )
                     $('#folder_selection').append(newOption)
                 },
                 error: function (result){
-                    var to_show_modal = $('#failureModal')
-                    var modal_body = to_show_modal.find('.modal-body')
-                    modal_body.text("Failure: folder already exists")
-                    to_show_modal.modal('show');
+                    var toShowModal = $('#failureModal')
+                    showModalWithText(toShowModal, "Folder already exists")
                 },
                 csrfmiddlewaretoken: csrftoken
             })
@@ -170,12 +167,12 @@ $(document).ready( function() {
     $('form').submit(function() {
         $(this).find("button[type='submit']").prop('disabled',true);
     });
-    toggle_read_status_on_button_click.init()
-    set_read_status_on_link_click.init()
-    add_to_folder_on_click.init()
-    add_new_folder_on_click.init()
-    change_selected_number_on_check.init()
+    toggleReadStatusOnButtonClick.init()
+    setReadStatusOnLinkClick.init()
+    addSubscriptionsToFolderOnClick.init()
+    addNewFolderOnClick.init()
+    changeSelectedNumberOnCheck.init()
 
-    $('#showUpdatedNoModal').modal('show');
+    $('#showUpdatedCountModal').modal('show');
 
 });
