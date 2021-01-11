@@ -5,5 +5,8 @@ from myrss.models.article import Article
 
 class SubscriptionArticle(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
-    subscription= models.ForeignKey('myrss.Subscription', on_delete=models.CASCADE)
+    subscription = models.ForeignKey('myrss.Subscription', on_delete=models.CASCADE)
     read = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('article', 'subscription',)

@@ -14,9 +14,9 @@ class ToggleRead(View):
     def post(self, request, article_id):
         subscription_article = SubscriptionArticle.objects.filter(subscription__owner=self.request.user, article=article_id)
         if subscription_article.exists():
-            subscription_article_to_toggle= subscription_article.get()
-            subscription_article_to_toggle.read = not subscription_article_to_toggle.read
-            subscription_article_to_toggle.save()
+            for subscription_article_to_toggle in subscription_article:
+                subscription_article_to_toggle.read = not subscription_article_to_toggle.read
+                subscription_article_to_toggle.save()
             data = {'success': 'toggled read'}
             status_code = status.HTTP_200_OK
         else:
