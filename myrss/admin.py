@@ -1,4 +1,7 @@
 from django.contrib import admin
+
+from .models.folder import Folder
+from .models.folder_subscription import FolderSubscription
 from .models.subscription import Subscription
 from .models.article import Article
 from .models.subscription_article import SubscriptionArticle
@@ -33,3 +36,12 @@ class ArticleAdmin(admin.ModelAdmin):
         return obj.subscriptions__count
 
     subscriptions_count.admin_order_field = 'subscriptions__count'
+
+@admin.register(Folder)
+class FolderAdmin(admin.ModelAdmin):
+    list_display = ('name', 'owner')
+    search_fields = ['name']
+
+@admin.register(FolderSubscription)
+class FolderSubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('folder', 'subscription')

@@ -11,12 +11,17 @@
 
     <h3>Active suscriptions</h3>
     <div>
-    <ul>
+    <ul id="subscriptions">
             {% if subscriptions %}
-
                     {% for subscription in subscriptions %}
-                        <li>
-                        <p>{{ subscription.name }}</p>
+                        <li class="subscription">
+                            <input type="checkbox" id="checkbox{{ subscription.id }}" data-subscription-id = {{ subscription.id }}> {{ subscription.name }}
+                            <div class="folders">
+                                {% for folder in subscription.folder_set.all %}
+                                     <span class="folder-name" name={{ folder.name }}>{{ folder.name }}</span>
+                                {% endfor %}
+                            </div>
+                            <div>
                             <form method="get"  style="display:inline;" action="{% url 'show_articles' subscription_id=subscription.id %}">
                                 <button type="submit" class="btn btn-primary" >View</button>
                             </form>
@@ -26,31 +31,53 @@
                             </form>
                             {% include "modals/delete_confirmation.html" with subs_id=subscription.id%}
                             <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#confirmDeleteModal{{ subscription.id }}">Delete</button>
+                            </div>
                         </li>
 
                         <br>
                     {% endfor %}
+                </ul>
+
+                <label for="folders">Add <span id="selectedNumber">0</span> to folder:</label>
+                  <select id="folder_selection" name="folders" id="folders">
+                  <option value="">-</option>
+                  {% for folder in folders %}
+                    <option value="{{ folder.id }}">{{ folder.name }}</option>
+                  {% endfor %}
+
+                  </select> >
+                  <input id="add_to_folder_button" type="submit" value="Go">
+                <p>
+                <form id="folder_form" method="post" action="{% url 'new_folder' %}">
+                    {{ folder_form | crispy }}
+                    {% csrf_token %}
+                    <button type="submit">Add new folder</button>
+                </form>
+                </p>
 
 
             {% else %}
                 <p>You have no subscriptions.</p>
             {% endif %}
-    </ul>
     </div>
 
-
-    <div class="row">
-        <p>Add link to RSS below</p>
-        <form method="post" action="{% url 'new_subscription' %}">
-            {{ subscription_form | crispy }}
-            {% csrf_token %}
+    <h3>Add a new subscription</h3>
+        <form id="rss_form" method="post" action="{% url 'new_subscription' %}">
+            <div class="link_field">
+                {{ subscription_form | crispy }}
+                {% csrf_token %}
+            </div>
             <button type="submit" class="btn btn-success">Add</button>
         </form>
-    </div>
+
+
 
     {% if show_updated %}
-        {% include "modals/show_updated_count.html" with new_articles_count=updated_count %}
+        {% include "modals/show_updated_count.html" with modal_id='"showUpdatedCountModal"' new_articles_count=updated_count %}
     {% endif %}
+    {% include "modals/success_modal.html" with modal_id='"successModal"'%}
+    {% include "modals/failure_modal.html" with modal_id='"failureModal"'%}
+    {% include "modals/generic_modal.html" with modal_id='"genericModal"' %}
 
 
 

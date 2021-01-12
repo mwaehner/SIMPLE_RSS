@@ -1,0 +1,16 @@
+{% extends "modals/base_modal.html" %}
+{% load static %}
+
+
+    {% block modal-header %}
+        Success
+    {% endblock %}
+    {% block modal-body %}
+         Success message
+    {% endblock %}
+    {% block modal-footer %}
+        <img class = "status_icon" src="{% static "images/success_icon" %}">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    {% endblock %}
+
+

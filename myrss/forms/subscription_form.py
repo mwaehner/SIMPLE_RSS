@@ -3,12 +3,20 @@ from django.forms import ModelForm
 from myrss.models.subscription import Subscription
 from django.contrib.auth.models import User
 import feedparser
+from django import forms
 
 
 class SubscriptionForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SubscriptionForm, self).__init__(*args, **kwargs)
+        self.fields['link'].label = ""
+
     class Meta:
         model = Subscription
         exclude = ('owner', 'name')
+        widgets = {
+            'link': forms.TextInput(attrs={'placeholder': 'Link to rss'}),
+        }
 
     def clean(self):
         url = self.cleaned_data.get("link")

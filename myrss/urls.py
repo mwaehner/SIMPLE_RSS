@@ -17,6 +17,8 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 
+from myrss.views.api.add_subscriptions_to_folder_view import AddSubscriptionsToFolder
+from myrss.views.api.create_folder_view import CreateFolderView
 from myrss.views.welcome_view import WelcomeView
 from myrss.views.signup_view import SignUpView
 from myrss.views.home_view import HomeView
@@ -45,4 +47,6 @@ urlpatterns = [
     url(r'delete_subscription/(?P<subscription_id>\d+)/$', DeleteSubscriptionView.as_view(), name="delete_subscription"),
     url(r'toggle_read/(?P<article_id>\d+)/$', ToggleRead.as_view(), name="toggle_read"),
     url(r'set_read/(?P<article_id>\d+)/$', SetRead.as_view(), name="set_read"),
+    url(r'new_folder$', CreateFolderView.as_view(), name="new_folder"),
+    url(r'add_subscriptions_to_folder$', AddSubscriptionsToFolder.as_view(), name="add_subscriptions_to_folder"),
 ]
