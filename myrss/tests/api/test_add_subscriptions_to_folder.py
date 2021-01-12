@@ -72,19 +72,24 @@ class NewFolderViewTests(TestCase):
         self.assertTrue(subscription.folder_set.filter(name="eventos").exists())
 
 
-''' este test no anda pero deberia andar (si hago lo mismo desde el browser, anda bien)
+# Este test no anda pero deberia andar. Parecería que las validaciones sobre la BD se realizan una vez que termina el
+# Unit Test, por lo que el try catch del endpoint testeado (add_subscriptions_to_folder) no sigue la rama del catch,
+# y devuelve success (200).
+
+'''
     def test_non_existent_subscription_is_not_added_to_existent_folder(self):
         response = self.client.post(
             "/new_folder", data={"name": "politica"}
         )
         folder_id = Folder.objects.get(name="politica").id
+        non_existent_suscription_id = 15141232
         response = self.client.post(
             "/add_subscriptions_to_folder", data={"folderId": str(folder_id),
-                                                  'subscriptionIds': str([15141232])
+                                                  'subscriptionIds': str([non_existent_suscription_id])
                                                   }
         )
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertFalse(Subscription.objects.all())
-        
-        '''
+        '''''
+
 

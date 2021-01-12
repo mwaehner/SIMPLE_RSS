@@ -22,8 +22,8 @@ class AddSubscriptionsToFolder(View):
     def post(self, request):
         data = request.POST
         folder_id = data['folderId']
-        subscriptions_data = data['subscriptionIds']
-        subscription_ids = json.loads(subscriptions_data)
+        subscriptions_as_json = data['subscriptionIds']
+        subscription_ids = json.loads(subscriptions_as_json)
         try:
             folder = Folder.objects.get(owner=self.request.user, pk=folder_id)
         except Folder.DoesNotExist:

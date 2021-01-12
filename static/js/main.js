@@ -144,8 +144,7 @@ var addNewFolderOnClick = {
                     var newOption = $('<option></option>')
                     var folderName = form.serializeArray()[0]['value']
                     newOption.append(folderName)
-                    CORREGIR ESTO: TIENE QUE DEVOLVER ID EN LA BD newOption.attr('value',optionsCount+1 )
-                    newOption.attr('name',folderName )
+                    newOption.attr('value',result['folderId'] )
                     $('#folder_selection').append(newOption)
                 },
                 error: function (result){

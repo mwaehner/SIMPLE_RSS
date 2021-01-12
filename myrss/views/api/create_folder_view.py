@@ -20,7 +20,7 @@ class CreateFolderView(View):
         new_folder_form = FolderForm(instance=new_folder, data=self.request.POST)
         if new_folder_form.is_valid():
             new_folder = new_folder_form.save()
-            response_data = {'success': 'added new folder'}
+            response_data = {'success': 'added new folder', 'folderId': new_folder.id}
             status_code = status.HTTP_200_OK
             return JsonResponse(response_data, status=status_code)
 
